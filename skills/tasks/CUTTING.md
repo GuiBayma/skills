@@ -18,7 +18,7 @@ Write what the task delivers from the user's perspective, never a layer-by-layer
 
 The task file is the whole context of the session that works it, so the **Context** section carries every decision from the brief that the task depends on; a feature task names its spec in the **Spec** line and carries in Context only what the spec leaves implicit.
 
-A task is worked in a fresh session pointed at its file; that session sets Status to `in-progress` when it starts and `done` when every verification item holds.
+A task is worked in a fresh session pointed at its file; that session sets Status to `in-progress` when it starts, records the PR it opens on a **PR** line after the Status line, and sets Status to `done` when every verification item holds.
 
 ## Task template
 

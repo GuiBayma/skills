@@ -1,0 +1,5 @@
+interface:
+  display_name: "Follow-ups"
+  short_description: "Hunt and triage the points deferred across a finished feature's PRs"
+policy:
+  allow_implicit_invocation: false
