@@ -1,0 +1,3 @@
+interface:
+  display_name: "Codebase design"
+  short_description: "Deep-module vocabulary for interfaces and seams"
