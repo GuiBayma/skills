@@ -17,7 +17,7 @@ Finding **facts** is your job; **decisions** are the user's. When a frontier que
 
 ## Asking a question
 
-Each question carries a title, a body, the options when the choice is closed, and your recommended answer with its reason. Choose the **form** of the body: the smallest view that shows what each answer would mean. Prose fits a judgement call; a visual form (a diff, a tree, a scenario, a mockup) fits a choice about shape, flow or structure, where prose would leave the user picturing the options in their head. Read [QUESTION-FORMS.md](./QUESTION-FORMS.md) before the first question for the forms and their shapes.
+Each question carries a title, a body, the options when the choice is closed, and your recommended answer with its reason. Choose the **form** of the body: the smallest view that shows what each answer would mean. Prose fits a judgement call, each option on its own line with the cost it carries; a visual form (a diff, a tree, a scenario, a mockup) fits a choice about shape, flow or structure, where prose would leave the user picturing the options in their head. Load the `show-me` skill before the first question for the visual forms and their shapes.
 
 Present it in the message in this shape, or through a question tool when one is available and carries the form; either way, one question, then wait for the answer:
 
