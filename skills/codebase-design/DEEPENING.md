@@ -13,4 +13,4 @@ Classify each dependency of the candidate cluster, because the category decides 
 
 ## Replace the tests
 
-Write the new tests at the deepened module's interface, then delete the unit tests on the shallow modules it absorbed. Once interface tests exist, the old tests only pin the internal shape the deepening just dissolved: they fail on every refactor and catch no bug. Treat the deletion as part of the deepening, because tests left behind are the layer that makes the next refactor expensive.
+Write the new tests at the deepened module's interface, then delete the unit tests on the shallow modules it absorbed. Delete only once every behaviour the old tests covered (error modes and edge cases included, not just the happy path) is asserted through the new interface, so the deepening loses no coverage; list those behaviours from the old tests before writing the new ones. Past that point the old tests only pin the internal shape the deepening just dissolved: they fail on every refactor and catch no bug. Treat the deletion as part of the deepening, because tests left behind are the layer that makes the next refactor expensive.

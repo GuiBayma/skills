@@ -40,7 +40,7 @@ Each entry names the canonical term and the common words it replaces, so a reade
 
 When designing an interface, ask: can I reduce the number of methods, simplify the parameters, hide more complexity inside? Two moves do most of the work, because anything a caller must supply, know, or clean up is interface:
 
-- **Take dependencies as parameters** (`processOrder(order, paymentGateway)`) rather than constructing them inside the module. A constructed dependency is a hidden fact the caller must know, and a test can reach it only by crossing past the interface.
+- **Take as parameters the dependencies that vary at this seam** (`processOrder(order, paymentGateway)`: production and test need different gateways) rather than constructing them inside the module. A constructed dependency that varies is a hidden fact the caller must know, and a test can reach it only by crossing past the interface. A dependency that has a local stand-in and never varies for callers (a database with an in-memory or embedded double) stays behind an internal seam, swapped there by the module's own tests, because exposing it would be a single-adapter seam.
 - **Return results** (`calculateDiscount(cart): Discount`) rather than mutating what was passed in. A returned value is observable at the interface; a side effect has to be inspected somewhere else.
 
 ## Going deeper
