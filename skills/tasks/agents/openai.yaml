@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tasks"
+  short_description: "Break a conversation, plan or spec into session-sized tasks"
+policy:
+  allow_implicit_invocation: false
