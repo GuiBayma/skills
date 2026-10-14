@@ -1,0 +1,5 @@
+interface:
+  display_name: "Review"
+  short_description: "Two-axis review of an implement PR, posted as a PR comment"
+policy:
+  allow_implicit_invocation: false
