@@ -1,0 +1,5 @@
+interface:
+  display_name: "Retro"
+  short_description: "Retrospective on the process behind one merged PR"
+policy:
+  allow_implicit_invocation: false
