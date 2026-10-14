@@ -44,7 +44,7 @@ Standing instructions for the whole session:
 2. **Find the spec sources.** The task file is the primary spec and lives outside version control, so it exists only in this clone:
 
    1. The path on the PR body's **Task** line.
-   2. Otherwise the task whose slug is the branch name: `docs/features/*/tasks/*-<headRefName>.md` or `docs/tasks/<headRefName>.md`.
+   2. Otherwise the task the branch names: `docs/features/<feature-name>/tasks/<NN>-<slug>.md` for a branch `<feature-name>/<NN>-<slug>`, or `docs/tasks/<headRefName>.md`.
    3. Otherwise a path the user passed, or the user asked where it is.
 
    Read the task in full, then the file on its **Spec** line when it has one. A task is one slice of its spec, so the spec supplies context and the task sets the scope. When the user says there is no task, the Spec sub-agent is skipped and the comment says so under `## Spec`.
