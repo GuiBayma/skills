@@ -4,13 +4,14 @@ The brief of a hunter sub-agent dispatched by `follow-ups`: how to read one merg
 
 ## What to read
 
-The PR's whole conversation, from the three places a review lands, plus its body and the markers its diff added:
+The PR's whole conversation, from the three places a review lands, plus its body, its commit messages, and the markers its diff added:
 
 ```sh
 gh pr view <number> --json number,url,title,body,headRefName
 gh pr view <number> --comments
 gh api --paginate repos/{owner}/{repo}/pulls/<number>/reviews
 gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments
+gh api --paginate repos/{owner}/{repo}/pulls/<number>/commits --jq '.[] | .sha[:7] + " " + .commit.message'
 gh pr diff <number> | grep -nE '^\+.*(TODO|FIXME|HACK|XXX)'
 ```
 
@@ -24,14 +25,14 @@ A point is **refuted** when the answer argued against the point itself (the revi
 
 ## Shape
 
-Return every candidate in this shape, under 150 words each, and "none" when the PR deferred nothing:
+Return every candidate in this shape, under 150 words each, and "none" when the PR deferred nothing. A point the implementer raised and postponed in one statement (a PR body line, a commit message, a marker in the diff) is its own deferral: quote it once under **Raised**, write "same statement" under **Deferred**, and locate it by what it is (a comment or review URL, the PR body, a commit sha, a diff path and line).
 
 ```markdown
 ### <title: the point in one line>
 
-- **Raised:** "<quote>" (<reviewer | implementer>, <comment or review URL>)
-- **Deferred:** "<quote of the answer that postponed it>" (<who>, <URL>)
-- **Why it was out of scope:** <the task or spec line the answer leaned on, quoted>
+- **Raised:** "<quote>" (<reviewer | implementer>, <where>)
+- **Deferred:** "<quote of the answer that postponed it>" (<who>, <where>) | same statement
+- **Why it was out of scope:** <the task or spec line the deferral leaned on, quoted, or "none given">
 - **Where it applies:** <the modules, docs, or contracts named in the exchange, as the PR saw them>
 - **Out of Scope in the spec:** yes, "<spec line>" | no
 ```
