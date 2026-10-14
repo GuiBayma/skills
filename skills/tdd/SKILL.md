@@ -29,4 +29,4 @@ Each one as code, beside its good counterpart, is in [tests.md](tests.md): read 
 - **Implementation-coupled**: mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behaviour has not changed.
 - **Tautological**: the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values come from an independent source of truth: a known-good literal, a worked example, the spec.
 
-When a test needs a stand-in for a dependency, read [mocking.md](mocking.md): doubles belong only at the seams where the code meets what you do not control, and those seams are shaped for it.
+When a test needs a stand-in for a dependency, read [mocking.md](mocking.md): doubles belong only at the seams where the code leaves the process (a third-party service, or your own service across a network), and those seams are shaped for it.

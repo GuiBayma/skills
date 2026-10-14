@@ -1,6 +1,6 @@
 # When to mock
 
-Mock only at the seams where the code meets what you do not control: external APIs (payment, email), time and randomness, and sometimes the file system or the database, where a local stand-in (a test database, an in-memory double) is preferred to a mock. Your own modules and internal collaborators are exercised for real, because a double of something you control tests the double, not the behaviour, and couples the test to the implementation.
+Mock only at the seams where the code leaves the process. Which double fits follows the dependency categories of the `codebase-design` skill: a **true external** dependency (Stripe, Twilio, time, randomness) takes a mock adapter at its port; a **remote but owned** service (your own microservice or internal API) takes an in-memory adapter at its port, so the test needs no network even though the service is yours; a **local-substitutable** dependency (a database, the file system) runs its local stand-in (a test database, an in-memory filesystem) inside the suite rather than a mock. Everything **in-process**, your own modules and internal collaborators, is exercised for real, because a double of code that runs in the same process tests the double, not the behaviour, and couples the test to the implementation.
 
 ## Shaping a seam for mocking
 
