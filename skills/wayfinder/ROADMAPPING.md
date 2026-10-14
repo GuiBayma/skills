@@ -26,7 +26,7 @@ A ticket closed after the roadmap was drawn is a decision the roadmap was made w
 
 - Features `done` or `in-progress` stay as they are. When the decision changes the one in flight, the change goes into its spec and through the `tasks` skill, because its tasks are the contract its sessions work from.
 - Features `planned` are open to change: add, split, reorder, or drop them so every decision is carried once more.
-- Log the revision under Revisions, naming the ticket that caused it, so a reader can tell why the sequence moved.
+- Log the revision under Revisions naming the ticket, even when nothing moved, because the Revisions entry is what marks the ticket absorbed; a reader also learns why the sequence moved.
 
 Review the revised sequence with the user as in Drawing, step 3.
 

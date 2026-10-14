@@ -112,20 +112,20 @@ The user invokes with a loose idea.
 2. **Map the frontier.** Grill again, **breadth-first**: fan out across the whole space rather than deep on any one thread, surfacing the open decisions and the first steps takeable now. If this surfaces no fog (the way is already clear and the whole journey fits one feature), say so and point the user at the `feature` skill instead: a map earns its keep only on fog.
 3. **Create the map** with Destination and Notes filled in, Decisions so far empty, and the fog sketched into Not yet specified. Pick the slug in kebab-case.
 4. **Create the tickets you can specify now**, each with its Type and Blocked by, so the frontier and the blocked are told apart. Everything you cannot yet specify stays as fog.
-5. **Dispatch one research sub-agent per research ticket**, all in parallel, and wait for them. Record each answer as the ticket's Resolution, close it, and append its line to Decisions so far: the dispatching session writes the map, because several researchers run at once and the map is one file.
+5. **Dispatch one research sub-agent per unblocked research ticket**, claiming each first, all in parallel, and wait for them. A blocked research ticket waits for its blocker, because the decision it hangs on shapes the question (which vendor's API to read). Record each answer as the ticket's Resolution, close it, and append its line to Decisions so far: the dispatching session writes the map, because several researchers run at once and the map is one file.
 6. Stop: charting is one session's work, and every other ticket is HITL.
 
 ### Work through the map
 
 The user invokes with a map (`/wayfinder docs/maps/<slug>/MAP.md`), optionally naming a ticket or bringing a question implementation surfaced. Without a ticket, you pick the step, not the user.
 
-1. **Load the map**, and the roadmap when the map links one. Read the low-res view, not every ticket body.
+1. **Load the map**, and the roadmap when the map links one. Read the low-res view, not every ticket body. When the roadmap has a feature `in-progress`, check its tasks and set the entry to `done` once every task is `done`, because `implement` updates only the task.
 2. **Fold in what the user brought.** A sharp question becomes a ticket; a blurry one goes into Not yet specified. Adding tickets or fog is part of any step, never a step of its own.
 3. **Choose the step**, in this order:
    - A frontier ticket (the one the user named, else the lowest-numbered): **claim it** and resolve it as its Type says. Read the Type line, because the body never states the type. Zoom as needed: read the full body of any related ticket on demand, and load whichever skills the map's Notes name.
-   - No open ticket, no fog, no roadmap yet: **draw the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
-   - A roadmap exists and a ticket closed since it was drawn: **revise the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
-   - A roadmap exists with a feature in flight: report where it stands and stop, because its tasks are worked through `implement`, not here.
+   - Every ticket `closed`, no fog, no roadmap yet: **draw the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
+   - Every ticket `closed`, and one of them is named by no Carries line and no Revisions entry of the roadmap: **revise the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
+   - A ticket `claimed` by another session, or a feature `in-progress`: report where it stands and stop, because the roadmap is drawn on every resolution and a feature's tasks are worked through `implement`, not here.
    - A roadmap exists and the previous feature is finished: **open the next feature** by [ROADMAPPING.md](./ROADMAPPING.md).
    - Every feature on the roadmap is `done`: **close the map** by [ROADMAPPING.md](./ROADMAPPING.md).
 4. **Record a ticket's resolution**: append the Resolution, set the Status to `closed`, and append one line to Decisions so far.
