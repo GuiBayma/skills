@@ -55,10 +55,9 @@ Variants are **structurally different**: different layout, different information
 
 ### 3. Wire them together
 
-Create a single switcher component on the route:
+Create a single switcher component on the route, in the project's framework (the sketch is pseudo-code):
 
 ```tsx
-// pseudo-code, adapt to the project's framework
 const variant = searchParams.get('variant') ?? 'A';
 return (
   <>

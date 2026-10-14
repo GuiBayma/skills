@@ -19,11 +19,10 @@ Standing instructions for the whole session:
 
 1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find.
 
-2. **Branch**, when the work will change anything under version control. A feature task's branch carries its feature as a prefix, so every PR of a feature is found by that prefix (`gh pr list --search "head:<feature-name>/"`); a stand-alone task's branch is its slug:
+2. **Branch**, when the work will change anything under version control. A feature task's branch is `<feature-name>/<NN>-<slug>`, carrying its feature as a prefix so every PR of a feature is found by that prefix (`gh pr list --search "head:<feature-name>/"`); a stand-alone task's branch is its `<slug>`:
 
    ```sh
-   git switch main && git pull --ff-only && git switch -c <feature-name>/<NN>-<slug>   # feature task
-   git switch main && git pull --ff-only && git switch -c <slug>                        # stand-alone task
+   git switch main && git pull --ff-only && git switch -c <branch>
    ```
 
    Operational work (a migration run, a secret rotated, a dashboard configured) that touches nothing versioned skips the branch and the PR: do it, then go to step 4.

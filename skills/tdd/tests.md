@@ -7,7 +7,6 @@ The anti-patterns of `SKILL.md` as code, each beside its good counterpart.
 A good test crosses the interface, the way a caller would, and asserts on an outcome the caller can observe:
 
 ```typescript
-// GOOD: Tests observable behaviour
 test("user can checkout with valid cart", async () => {
   const cart = createCart();
   cart.add(product);
@@ -29,7 +28,6 @@ Characteristics:
 Coupled to internal structure, so they break on a refactor that changed no behaviour:
 
 ```typescript
-// BAD: Tests implementation details
 test("checkout calls paymentService.process", async () => {
   const mockPayment = jest.mock(paymentService);
   await checkout(cart, payment);
@@ -47,14 +45,14 @@ Red flags:
 - Verifying through a side channel instead of the interface
 
 ```typescript
-// BAD: Bypasses the interface to verify
+// BAD
 test("createUser saves to database", async () => {
   await createUser({ name: "Alice" });
   const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
   expect(row).toBeDefined();
 });
 
-// GOOD: Verifies through the interface
+// GOOD
 test("createUser makes user retrievable", async () => {
   const user = await createUser({ name: "Alice" });
   const retrieved = await getUser(user.id);
@@ -64,17 +62,17 @@ test("createUser makes user retrievable", async () => {
 
 ## Tautological tests
 
-The expected value restates the implementation, so the test passes by construction:
+The expected value restates the implementation, so the test passes by construction; the good counterpart asserts an independent, known literal:
 
 ```typescript
-// BAD: Expected value is recomputed the way the code computes it
+// BAD
 test("calculateTotal sums line items", () => {
   const items = [{ price: 10 }, { price: 5 }];
   const expected = items.reduce((sum, i) => sum + i.price, 0);
   expect(calculateTotal(items)).toBe(expected);
 });
 
-// GOOD: Expected value is an independent, known literal
+// GOOD
 test("calculateTotal sums line items", () => {
   expect(calculateTotal([{ price: 10 }, { price: 5 }])).toBe(15);
 });
