@@ -3,7 +3,7 @@ name: writing-for-agents
 description: Writing documents for agents. Use when creating or editing a skill, an AGENTS.md or CLAUDE.md, or any doc an agent reaches through a pointer in one of those.
 ---
 
-Reference for writing any document an agent consumes: a skill, an `AGENTS.md` / `CLAUDE.md`, a doc reached by a pointer. The packaging differs; the writing does not: the same levers cut **variance**, the spread between runs in the _process_ the agent takes rather than in the output it produces. A review with this skill is complete when every lever below has been checked against the document and each finding became an edit or an explicit decision to keep. The mechanical budgets (frontmatter fields, `name`, `description` length, body length, relative links, `AGENTS.md` length) are enforced by `check.sh` at the repo root, so the prose here carries only the judgement.
+Reference for writing any document an agent consumes: a skill, an `AGENTS.md` / `CLAUDE.md`, a doc reached by a pointer. The packaging differs; the writing does not: the same levers cut **variance**, the spread between runs in the _process_ the agent takes rather than in the output it produces. A review with this skill is complete when every lever below has been checked against the document and each finding became an edit or an explicit decision to keep.
 
 When the document you're writing is a skill, read [`SKILL-MECHANICS.md`](SKILL-MECHANICS.md) for frontmatter, invocation choice, portability between Claude Code and Codex, and router skills.
 

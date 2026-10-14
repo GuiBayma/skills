@@ -25,6 +25,4 @@ for skill in "$repo"/skills/*/; do
   link "$repo/skills/$name" "$HOME/.codex/skills/$name"
 done
 
-"$repo/check.sh" "$repo" || status=1
-
 exit "$status"
