@@ -3,6 +3,8 @@
 The body of every PR opened by `implement`. Skip preambles and keep prose brief; write in the project's glossary vocabulary.
 
 ```markdown
+**Task:** `<path to the task file>`
+
 ## Summary
 
 <the smallest view that makes the change clear: a diff, a call tree, a file tree, pseudocode>
@@ -22,6 +24,10 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
 
 <optional: what the merge can reach>
 ```
+
+## Task
+
+The path of the task file as the user passed it, because the task lives outside version control, so nothing else in the PR says what the change was meant to deliver.
 
 ## Summary
 
