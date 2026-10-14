@@ -17,7 +17,7 @@ Standing instructions for the whole session:
 
 ## Process
 
-1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find.
+1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find.
 
 2. **Branch**, when the work will change anything under version control:
 
@@ -46,8 +46,8 @@ Standing instructions for the whole session:
 
      ```sh
      gh pr view <number> --comments
-     gh api repos/{owner}/{repo}/pulls/<number>/reviews
-     gh api repos/{owner}/{repo}/pulls/<number>/comments
+     gh api --paginate repos/{owner}/{repo}/pulls/<number>/reviews
+     gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments
      ```
 
      Judge every point, nits included: act on each one you find valid (through `tdd` when it changes code) and push the commit. Then post one comment on the PR answering the review point by point, each with whether it was changed and why, or why it was kept, because the user decides the next round from that comment alone. Post it even when every point was kept. End the turn with the comment posted: the user decides again, and step 6 repeats until approval.
