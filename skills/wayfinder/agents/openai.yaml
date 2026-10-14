@@ -1,0 +1,5 @@
+interface:
+  display_name: "Wayfinder"
+  short_description: "Chart a map of decision tickets, then a roadmap of features, for work too big for one session"
+policy:
+  allow_implicit_invocation: false
