@@ -12,8 +12,10 @@ Read [CUTTING.md](./CUTTING.md) before drafting: it holds the cutting rules and 
 
 ## Where the tasks live
 
-- **Feature tasks**: when the source is a spec at `docs/features/<feature-name>/SPEC.md`, write `docs/features/<feature-name>/tasks/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). The `feature` skill already keeps that directory out of version control.
-- **Stand-alone tasks**: otherwise write `docs/tasks/<slug>.md`, and add `docs/tasks/` to `.gitignore` when it is not there yet, because tasks are working notes, never part of the codebase.
+- **Feature tasks**: when the source is a spec at `docs/features/<feature-name>/SPEC.md`, write `docs/features/<feature-name>/tasks/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first).
+- **Stand-alone tasks**: otherwise write `docs/tasks/<slug>.md`.
+
+In both cases, check `.gitignore` and add the directory (`docs/features/` or `docs/tasks/`) when it is not there yet, because tasks are working notes, never part of the codebase, and a spec written by hand has no skill guarding its directory.
 
 ## Process
 
