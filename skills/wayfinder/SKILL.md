@@ -119,10 +119,11 @@ The user invokes with a loose idea.
 
 The user invokes with a map (`/wayfinder docs/maps/<slug>/MAP.md`), optionally naming a ticket or bringing a question implementation surfaced. Without a ticket, you pick the step, not the user.
 
-1. **Load the map**, and the roadmap when the map links one. Read the low-res view, not every ticket body. When the roadmap has a feature `in-progress`, check its tasks and set the entry to `done` once every task is `done`, because `implement` updates only the task.
+1. **Load the map**, and the roadmap when the map links one. Read the low-res view, not every ticket body. When the roadmap has a feature `in-progress` with a Spec line, check the tasks under its spec's `tasks/` directory and set the entry to `done` once there is at least one and every one is `done`, because `implement` updates only the task; an entry without a Spec line, or a spec without tasks, is a feature still being opened, never a finished one.
 2. **Fold in what the user brought.** A sharp question becomes a ticket; a blurry one goes into Not yet specified. Adding tickets or fog is part of any step, never a step of its own.
 3. **Choose the step**, in this order:
    - A frontier ticket (the one the user named, else the lowest-numbered): **claim it** and resolve it as its Type says. Read the Type line, because the body never states the type. Zoom as needed: read the full body of any related ticket on demand, and load whichever skills the map's Notes name.
+   - Every ticket `closed` and fog remains: **sharpen the fog**. Load the `grilling` and `domain-modeling` skills and grill Not yet specified breadth-first until a patch yields a ticket or is ruled out of scope, because fog with no ticket ahead of it clears only through conversation, and a roadmap drawn over it is drawn over a question nobody asked.
    - Every ticket `closed`, no fog, no roadmap yet: **draw the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
    - Every ticket `closed`, and one of them is named by no Carries line and no Revisions entry of the roadmap: **revise the roadmap** by [ROADMAPPING.md](./ROADMAPPING.md).
    - A ticket `claimed` by another session, or a feature `in-progress`: report where it stands and stop, because the roadmap is drawn on every resolution and a feature's tasks are worked through `implement`, not here.
