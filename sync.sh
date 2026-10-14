@@ -1,12 +1,9 @@
 #!/bin/sh
-# Links the agent config files in $HOME to the files in this repo.
-# Idempotent: safe to run again after cloning, moving the repo, or adding a skill.
 set -eu
 
 repo=$(cd "$(dirname "$0")" && pwd)
 status=0
 
-# link SOURCE TARGET: points TARGET at SOURCE, refusing to replace anything but a symlink.
 link() {
   mkdir -p "$(dirname "$2")"
   if [ -e "$2" ] && [ ! -L "$2" ]; then
@@ -27,5 +24,7 @@ for skill in "$repo"/skills/*/; do
   link "$repo/skills/$name" "$HOME/.claude/skills/$name"
   link "$repo/skills/$name" "$HOME/.codex/skills/$name"
 done
+
+"$repo/check.sh" "$repo" || status=1
 
 exit "$status"
