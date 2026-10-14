@@ -1,0 +1,3 @@
+interface:
+  display_name: "Domain modeling"
+  short_description: "Sharpen the ubiquitous language; keep glossary and ADRs current"
