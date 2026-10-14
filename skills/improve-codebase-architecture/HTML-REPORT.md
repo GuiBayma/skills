@@ -16,7 +16,6 @@ The architectural review is one self-contained HTML file: Tailwind from its CDN 
       mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
     </script>
     <style>
-      /* the small layer Tailwind does not cover: seam lines, leakage, depth */
       .seam { stroke-dasharray: 4 4; }
       .leak { stroke: #dc2626; }
       .deep { background: linear-gradient(135deg, #0f172a, #1e293b); }

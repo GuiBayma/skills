@@ -23,7 +23,7 @@ Standing instructions for the whole session:
 1. **Pin the PR.** Resolve it and bring its head to disk in a **worktree** of its own, because the sub-agents need the code around the diff and the standards files, not only the hunks, and the clone's branch and working tree belong to the `implement` session:
 
    ```sh
-   gh pr view <number> --json number,url,title,body,headRefName,baseRefName   # no number: the current branch's PR
+   gh pr view <number> --json number,url,title,body,headRefName,baseRefName
    gh pr diff <number>
    git fetch origin <headRefName>
    git worktree add --detach "$(mktemp -d)" origin/<headRefName>

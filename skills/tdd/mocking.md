@@ -9,12 +9,12 @@ Two moves make a seam mockable; the `codebase-design` skill holds the reasoning 
 **Take the dependencies that vary at the seam as parameters** rather than constructing them inside the module, so a test supplies its double through the interface instead of reaching past it:
 
 ```typescript
-// Easy to mock
+// GOOD
 function processPayment(order, paymentClient) {
   return paymentClient.charge(order.total);
 }
 
-// Hard to mock
+// BAD
 function processPayment(order) {
   const client = new StripeClient(process.env.STRIPE_KEY);
   return client.charge(order.total);
@@ -24,14 +24,14 @@ function processPayment(order) {
 **Prefer SDK-style interfaces over generic fetchers**: one function per external operation, so each mock returns one specific shape, test setup carries no conditional logic, a test shows which operations it exercises, and each operation is typed on its own:
 
 ```typescript
-// GOOD: Each function is independently mockable
+// GOOD
 const api = {
   getUser: (id) => fetch(`/users/${id}`),
   getOrders: (userId) => fetch(`/users/${userId}/orders`),
   createOrder: (data) => fetch("/orders", { method: "POST", body: data }),
 };
 
-// BAD: Mocking requires conditional logic inside the mock
+// BAD
 const api = {
   fetch: (endpoint, options) => fetch(endpoint, options),
 };

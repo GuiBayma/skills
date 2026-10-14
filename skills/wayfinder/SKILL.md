@@ -36,17 +36,15 @@ Standing instructions for every session on a map:
 
 ## Decisions so far
 
-<!-- the index: one line per closed ticket, enough to judge relevance; the detail is in the ticket -->
-
 - [<closed ticket title>](tickets/<NN>-<slug>.md): <one-line gist of the answer>
 
 ## Not yet specified
 
-<!-- see "Fog of war": in-scope fog you cannot ticket yet; graduates as the frontier advances -->
+<the fog: in-scope questions too blurry to ticket yet>
 
 ## Out of scope
 
-<!-- see "Out of scope": work ruled beyond the destination; closed, never graduates -->
+<work ruled beyond the destination, one line each, linking its ticket when it had one>
 ```
 
 The roadmap, once drawn, is linked from a `**Roadmap:** [ROADMAP.md](ROADMAP.md)` line after the Status line.
