@@ -1,0 +1,5 @@
+interface:
+  display_name: "Feature"
+  short_description: "Consolidate the conversation into a feature spec"
+policy:
+  allow_implicit_invocation: false
