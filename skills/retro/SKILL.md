@@ -6,13 +6,13 @@ disable-model-invocation: true
 
 # Retro
 
-Hold a **retrospective** on the cycle behind one merged **PR**: the one the user passed with the invocation (`/retro <number or URL>`), or the PR named in the latest commit on `main` when none was passed (after a squash merge its subject ends in `(#<number>)`). Where `review` judged the code, this skill judges the **process**: the spec and task the cycle was cut from, the `implement` and `review` sessions that worked it, the repo's guardrails and steering files, and the skills themselves. Every finding is a proposed edit to the agent's **environment**, so the next cycle runs with less variance; the code stays out, because the PR is merged and the review already covered it. Done when the candidates are presented to the user, ordered by severity, each with the evidence it rests on, the file that owns the fix (its **home**), and the edit, and the user has picked which to apply.
+Hold a **retrospective** on the cycle behind one merged **PR**: the one the user passed with the invocation (`/retro <number or URL>`), or the PR named in the latest commit on `main` when none was passed (after a squash merge its subject ends in `(#<number>)`). Where `review` judged the code, this skill judges the **process**: the spec and task the cycle was cut from, the `implement` and `review` sessions that worked it, the repo's guardrails and steering files, and the skills themselves. Every finding is a proposed edit to the agent's **environment**, so the next cycle runs with less variance; the code stays out, because the PR is merged and the review already covered it. Done when the candidates were presented to the user, ordered by severity, each with the evidence it rests on, the file that owns the fix (its **home**), and the edit; the user picked; and every picked candidate is written in its home (outside the project) or cut into a task by the `tasks` skill (inside it), or the user picked none.
 
 Standing instructions for the whole session:
 
 - Load the `writing-for-agents` skill before the first finding, because every home is a document an agent reads, and its levers (no-ops, negation, duplication, context pointers, completion criteria) are the vocabulary the findings are written in.
 - Every finding rests on **evidence** quoted from a primary source: a turn in a session, a line in the task, a comment on the PR. An improvement with no evidence behind it is a guess, and guesses sediment into steering files.
-- Apply only what the user picks. An edit to a skill or to the global `AGENTS.md` lands in the repo behind the symlink (`readlink -f`), where the user commits it, because those files are versioned apart from the project.
+- The user picks; a candidate not picked is discarded. A picked candidate's home decides what happens to it. Outside the project's version control (the task or spec under `docs/`, a skill, the global `AGENTS.md`) you edit it now, in the repo behind the symlink (`readlink -f`), where the user commits it. Inside it, it becomes a task, because every change to the project goes through `implement` and a reviewed PR.
 
 ## Process
 
@@ -48,6 +48,10 @@ Standing instructions for the whole session:
       Evidence: "<quoted turn, line, or comment>" (<source>).
       Home: `<file>`. Edit: <the change, or the check to build>.
    ```
+
+4. **Write the picks whose home is outside the project**, each edited with `writing-for-agents`, and say what changed in each file. The commit and the PR in the skills repo stay with the user.
+
+5. **Cut the picks whose home is inside the project into tasks.** The `tasks` skill is user-invoked, so reach it by path: read `../tasks/SKILL.md` from the siblings of this skill's directory and run its process, with the picked candidates (each with its evidence, home, and edit) as the source, because they are the whole brief and the session that implements the task has only the task file. Skip this step when no pick lives inside the project.
 
 ## Categories
 
