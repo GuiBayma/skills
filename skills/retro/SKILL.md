@@ -31,9 +31,11 @@ Standing instructions for the whole session:
    - The sessions: `implement` and `review` each ran in a session of its own, and their transcripts carry what the PR does not show (the exploration, the retries, the commands that failed). Find them by searching the transcripts for the task path, the branch name, or the PR number; the user names the session when the search is ambiguous:
 
      ```sh
-     grep -l "<task path, headRefName, or PR number>" ~/.claude/projects/*/*.jsonl   # Claude Code
-     grep -rl "<task path, headRefName, or PR number>" ~/.codex/sessions/             # Codex
+     grep -rl "<task path, headRefName, or PR number>" ~/.claude/projects/   # Claude Code
+     grep -rl "<task path, headRefName, or PR number>" ~/.codex/sessions/     # Codex
      ```
+
+     A Claude Code session at `<session>.jsonl` keeps the transcripts of the sub-agents it dispatched in `<session>/subagents/`: read them with it, because `review` delegates each axis to a sub-agent and `tasks` the adversarial cut, so their searches, retries and errors are there and only the report reaches the main transcript.
 
      Read a transcript for its course rather than its text: the tool calls and their errors, the searches, the retries, the turns where the agent asked or guessed.
 
