@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Improve codebase architecture
 
-Surface architectural friction and propose **deepening opportunities**: refactors that turn a cluster of shallow modules into one deep module, for testability and navigability. Load the `codebase-design` skill first, because its glossary (module, interface, depth, seam, adapter, leverage, locality) and principles (the deletion test, the interface is the test surface, two adapters or no seam) are the language of every candidate, and the `domain-modeling` skill for where the project's glossary and ADRs live. Done when the report is on disk and open, the user picked a candidate, and the grilling over it reached a shared understanding; the `feature` skill consolidates that understanding into a spec from there.
+Surface architectural friction and propose **deepening opportunities**: refactors that turn a cluster of shallow modules into one deep module, for testability and navigability. Load the `codebase-design` skill first, because its glossary (module, interface, depth, seam, adapter, leverage, locality) and principles (the deletion test, the interface is the test surface, two adapters or no seam) are the language of every candidate, and the `domain-modeling` skill for where the project's glossary and ADRs live. Done when the report is on disk and open, the user picked a candidate, and the grilling over it reached a shared understanding (the `feature` skill consolidates that understanding into a spec from there); or when the scope yielded no candidate and the user was told so.
 
 ## Process
 
@@ -31,7 +31,7 @@ Then dispatch a sub-agent to walk the scope, briefed with the `codebase-design` 
 - Coupled modules leaking across their seam.
 - Code untested, or testable only past its interface.
 
-Apply the **deletion test** to every suspected shallow module: a candidate is a cluster whose deletion would concentrate complexity in one place, because a deletion that merely moves it is a rename, not a deepening.
+Apply the **deletion test** to every suspected shallow module: complexity that vanishes on deletion marks a pass-through, and complexity that reappears across the callers marks a module earning its keep. A candidate is a cluster of pass-throughs around one body of logic, because the deepening absorbs them into a single module that passes the test; a lone pass-through whose deletion only removes indirection is a deletion, not a candidate.
 
 ### 2. Present the candidates as an HTML report
 
@@ -50,6 +50,8 @@ Each candidate is a card whose **before/after diagram** carries the weight; pros
 Name the domain in the glossary's terms ("the Order intake module", for a glossary that defines Order) and the architecture in the `codebase-design` terms.
 
 End the report with a **Top recommendation**: the candidate you would tackle first and why. Then end the turn asking the user which candidate to explore.
+
+A scope with no candidate (none found, or every one settled by an ADR) gets no report: end the turn saying so, with the hot spots scanned and the ADRs that settled the rest, so the user can widen the scope or reopen a decision.
 
 ### 3. Grill the pick
 
