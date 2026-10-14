@@ -1,23 +1,17 @@
-# Question forms
+---
+name: show-me
+description: Show a point visually with the smallest view that makes it clear (pseudocode, a diff, a call tree, a file tree, a table, a scenario, an HTML mockup). Use when the user says "show me", when prose would leave the reader picturing a shape in their head, or when another skill needs the forms for a question or a PR summary.
+---
 
-The shapes a grilling question can take. Pick the smallest view that shows what each answer would mean, place it beside the short text it supports, and keep only the calls, files, states and boundaries the decision turns on. One question usually needs one form; two at most.
+# Show me
+
+Make a point visually: pick the **smallest view** that shows what the reader must see, place it beside the short text it supports, and keep only the calls, files, states and boundaries the point turns on. One point usually needs one form; two at most. Done when the reader can see the shape without picturing it.
 
 Diagrams are box-and-line text with box-drawing glyphs, because a terminal renders markdown as plain text; Mermaid stays a code block there.
 
-## Prose with options
-
-A judgement call or trade-off with no structural shape: scope, priority, naming, policy. Each option on its own line with the cost it carries.
-
-```
-Who owns retries when the webhook delivery fails?
-
-A. The sender: retries with backoff, gives up after N attempts.
-B. The receiver: acknowledges fast, replays from its own queue.
-```
-
 ## Scenario
 
-A concrete case that forces a boundary to be stated: an edge case, a race, a failure. State the setup and ask what should happen; the user answers with behaviour, which settles the rule.
+A concrete case that forces a boundary to be stated: an edge case, a race, a failure. State the setup and what happens (or ask what should).
 
 ```
 A customer cancels at 09:59; the nightly batch had already picked the order at 09:58.
@@ -26,7 +20,7 @@ What does the customer see at 10:00?
 
 ## Table
 
-A choice with several axes. Options as rows, the criteria that decide as columns; three or four columns at most.
+Several options across several axes. Options as rows, the criteria that decide as columns; three or four columns at most.
 
 ```
 | Option      | Latency | Ops cost | Reversible |
@@ -50,7 +44,7 @@ on(save)
 
 ## Diff
 
-The change is the question and the surrounding shape already exists. Match the diff to the topic: code, pseudocode, a tree, a file layout.
+The change is the point and the surrounding shape already exists. Match the diff to the topic: code, pseudocode, a tree, a file layout.
 
 ```diff
  submitForm
@@ -76,7 +70,7 @@ Runtime control flow: who calls whom, in what order. Indentation for a call tree
 
 ## Component tree
 
-UI structure, with the state hooks and module boundaries the decision turns on.
+UI structure, with the state hooks and module boundaries the point turns on.
 
 ```tsx
 <SessionPage> (apps/example/src/routes/session.tsx)
@@ -109,8 +103,8 @@ function expandSkill(command: string): string {
 
 ## Mockup
 
-A visual UI, a layout, a state comparison too dense for text. Write one focused HTML file with the product's colours, type and components, real labels, desktop and mobile; open it, and put the question itself in the message with the path. An ASCII sketch in the message is enough when the question is about placement rather than look.
+A visual UI, a layout, a state comparison too dense for text. Write one focused HTML file with the product's colours, type and components, real labels, desktop and mobile; open it, and keep the point itself in the message with the path. An ASCII sketch in the message is enough when the point is placement rather than look.
 
 ```
-open path/to/grill-<decision>.html
+open path/to/show-me-<topic>.html
 ```

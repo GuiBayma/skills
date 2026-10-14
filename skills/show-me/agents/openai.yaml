@@ -1,0 +1,3 @@
+interface:
+  display_name: "Show me"
+  short_description: "Show a point with the smallest visual form that makes it clear"

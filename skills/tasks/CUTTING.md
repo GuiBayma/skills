@@ -16,7 +16,7 @@ The rules for cutting a brief into tasks, and the file each task is written to. 
 
 Write what the task delivers from the user's perspective, never a layer-by-layer implementation list. Name modules and interfaces rather than file paths or code snippets, because paths and snippets go stale fast. Exception: when a prototype produced a snippet that encodes a decision more precisely than prose can (a state machine, a reducer, a schema, a type shape), inline it trimmed to the decision-rich parts and note that it came from a prototype.
 
-The task file is the whole context of the session that works it, so the **Context** section carries every decision from the brief that the task depends on; for a feature task it may point at the spec and carry only what the spec leaves implicit.
+The task file is the whole context of the session that works it, so the **Context** section carries every decision from the brief that the task depends on; a feature task names its spec in the **Spec** line and carries in Context only what the spec leaves implicit.
 
 A task is worked in a fresh session pointed at its file; that session sets Status to `in-progress` when it starts and `done` when every verification item holds.
 
@@ -28,6 +28,8 @@ A task is worked in a fresh session pointed at its file; that session sets Statu
 **Delivers:** the end-to-end behaviour or operational outcome this task makes real, from the user's perspective.
 
 **Blocked by:** the numbers (or slugs, for stand-alone tasks) and titles of the tasks that gate this one, or "None (can start immediately)".
+
+**Spec:** `docs/features/<feature-name>/SPEC.md`
 
 **Status:** ready
 
@@ -41,4 +43,4 @@ The decisions from the brief this task depends on.
 - [ ] Another one
 ```
 
-Stand-alone tasks drop the `<NN>: ` prefix from the title.
+Stand-alone tasks drop the `<NN>: ` prefix from the title and the **Spec** line, because they have no spec.
