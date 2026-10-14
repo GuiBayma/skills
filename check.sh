@@ -9,10 +9,9 @@ fail() {
   status=1
 }
 
-# Collects a pipeline's messages here because its subshell cannot set status.
+# Takes a pipeline's output as an argument because its subshell cannot set status.
 report() {
-  msgs=$(cat)
-  [ -z "$msgs" ] || fail "$msgs"
+  [ -z "$1" ] || fail "$1"
 }
 
 frontmatter() {
@@ -20,11 +19,35 @@ frontmatter() {
 }
 
 field() {
-  printf '%s\n' "$1" | sed -n "s/^$2:[[:space:]]*//p" | head -n 1
+  printf '%s\n' "$1" | awk -v key="$2" -v quote="[\"']" '
+    block {
+      if ($0 ~ /^[^ \t]/) exit
+      sub(/^[ \t]+/, "")
+      out = out (out == "" ? "" : sep) $0
+      next
+    }
+    substr($0, 1, length(key) + 1) == key ":" {
+      value = substr($0, length(key) + 2)
+      gsub(/^[ \t]+|[ \t]+$/, "", value)
+      if (value ~ /^[>|][+-]?$/) { block = 1; sep = (value ~ /^>/) ? " " : "\n"; next }
+      sub("^" quote, "", value); sub(quote "$", "", value)
+      print value
+      exit
+    }
+    END { if (block) print out }'
 }
 
 body_lines() {
   awk 'NR>1 && $0=="---" {found=1; next} found {n++} END {print n+0}' "$1"
+}
+
+check_fields() {
+  printf '%s\n' "$1" | sed -n 's/^\([A-Za-z_-]*\):.*/\1/p' | while IFS= read -r key; do
+    case $key in
+      name | description | license | compatibility | metadata | allowed-tools | disable-model-invocation) ;;
+      *) echo "$2: field '$key' is not portable" ;;
+    esac
+  done
 }
 
 check_links() {
@@ -58,21 +81,16 @@ check_skill() {
   [ -n "$desc" ] || fail "$skill: missing description"
   [ ${#desc} -le 1024 ] || fail "$skill: description has ${#desc} characters, limit 1024"
 
-  printf '%s\n' "$fm" | sed -n 's/^\([A-Za-z_-]*\):.*/\1/p' | while IFS= read -r key; do
-    case $key in
-      name | description | license | compatibility | metadata | allowed-tools | disable-model-invocation) ;;
-      *) echo "$skill: field '$key' is not portable" ;;
-    esac
-  done | report
+  report "$(check_fields "$fm" "$skill")"
 
   lines=$(body_lines "$skill")
   [ "$lines" -lt 500 ] || fail "$skill: body has $lines lines, keep it under 500"
 
-  find "$dir" -name '*.md' -print | while IFS= read -r md; do check_links "$md"; done | report
+  report "$(find "$dir" -name '*.md' -print | while IFS= read -r md; do check_links "$md"; done)"
 
   yaml="$dir/agents/openai.yaml"
-  if [ -f "$yaml" ] && [ "$(field "$fm" disable-model-invocation)" = "true" ]; then
-    grep -Eq '^[[:space:]]*allow_implicit_invocation:[[:space:]]*false' "$yaml" \
+  if [ "$(field "$fm" disable-model-invocation)" = "true" ]; then
+    grep -Eqs '^[[:space:]]*allow_implicit_invocation:[[:space:]]*false' "$yaml" \
       || fail "$yaml: pair disable-model-invocation with policy.allow_implicit_invocation: false"
   fi
 }
@@ -85,7 +103,7 @@ agents="$repo/AGENTS.md"
 if [ -f "$agents" ]; then
   lines=$(wc -l <"$agents" | tr -d ' ')
   [ "$lines" -lt 200 ] || fail "$agents: $lines lines, keep it under 200"
-  check_links "$agents" | report
+  report "$(check_links "$agents")"
 fi
 
 [ "$status" -eq 0 ] && echo "ok: $repo"
