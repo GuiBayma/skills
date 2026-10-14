@@ -20,15 +20,16 @@ Standing instructions for the whole session:
 
 ## Process
 
-1. **Pin the PR.** Resolve it and bring its branch to disk, because the sub-agents need the code around the diff and the standards files, not only the hunks:
+1. **Pin the PR.** Resolve it and bring its head to disk in a **worktree** of its own, because the sub-agents need the code around the diff and the standards files, not only the hunks, and the clone's branch and working tree belong to the `implement` session:
 
    ```sh
    gh pr view <number> --json number,url,title,body,headRefName,baseRefName   # no number: the current branch's PR
-   gh pr checkout <number>
    gh pr diff <number>
+   git fetch origin <headRefName>
+   git worktree add --detach "$(mktemp -d)" origin/<headRefName>
    ```
 
-   An empty diff, or a checkout refused by local changes, stops you here with the user told why. Keep the diff command and the PR body: every sub-agent gets both.
+   An empty diff stops you here with the user told why. Keep the diff command, the PR body and the worktree path: every sub-agent gets all three, reads code in the worktree, and reads the task and spec (outside version control, so absent from the worktree) in this clone.
 
    Then read the PR's history from the three places a review lands, because earlier rounds, and the implementer's answers to them, decide what is settled:
 
@@ -59,7 +60,7 @@ Standing instructions for the whole session:
 
 4. **Dispatch both sub-agents** together, in parallel, each with the diff command, the PR body, the settled and claimed points, and the paths of its sources; wait for both. Each returns under 400 words, findings only: settled points stay out, and a claimed point the diff does not bear out comes back as a finding.
 
-   - **Standards brief**: read every source, then report each place the diff breaches a documented standard, citing the file and the rule, and each baseline smell, naming it and quoting the hunk. Mark each finding **hard** (a documented standard, repo or house, breached) or **judgement** (a smell: always a heuristic). Check the PR body against `PR.md`: the Evidence names a red that the diff's tests make real.
+   - **Standards brief**: read every source, then report each place the diff breaches a documented standard, citing the file and the rule, and each baseline smell, naming it and quoting the hunk. Mark each finding **hard** (a documented standard, repo or house, breached) or **judgement** (a smell: always a heuristic). Check the PR body against `PR.md`: every section present, and the Evidence's before and after in a form `PR.md` accepts (a screenshot, a test run, command output) and traceable to the branch: a test it names exists there, new or already present, and a screenshot or output shows the behaviour the diff changes.
    - **Spec brief**: read the task, then its spec, then report (a) what the task's **Delivers**, **Context** decisions and **Verification** items ask for that the diff leaves missing or partial, including a ticked item the diff does not make hold; (b) behaviour the diff adds that the task did not ask for, with the spec's **Out of Scope** as the sharpest test; (c) requirements that look implemented but whose implementation looks wrong; (d) the PR body's **Merge Danger** judged against the diff: a door or blast radius the diff contradicts. Mark each finding **missing**, **partial**, **creep** or **wrong**, and quote the task or spec line it rests on.
 
 5. **Publish.** Write the comment in the format of [COMMENT.md](./COMMENT.md), each report under its own heading, verbatim or lightly cleaned, findings numbered within each axis, and post it:
@@ -68,4 +69,4 @@ Standing instructions for the whole session:
    gh pr comment <number> --body-file <file>
    ```
 
-   End the turn with the comment URL. The user carries it to the `implement` session; the next review, when there is one, is a new session running this skill again.
+   Remove the worktree (`git worktree remove <path>`) and end the turn with the comment URL. The user carries it to the `implement` session; the next review, when there is one, is a new session running this skill again.
