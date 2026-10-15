@@ -38,10 +38,11 @@ Load the `show-me` skill and pick the form that shows what changed: a diff when 
 Show before and after with evidence appropriate to the change:
 
 - **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
+- **Configuration and CI wiring** (a build script, a workflow step, an ignore list): the **Before** is the command observed failing (a missing target, a red lint, a temporary probe made to fail and then reverted), and the **After** is the same command green.
 - **Documentation-only changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
 - **Behaviour-preserving refactors:** identify the existing tests covering the affected interface and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
 
-Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
+Quote the red you saw at the time in a `text` block under its **Before**: the command, the failing lines, and the exit code, because it cannot be reproduced once the code is green.
 
 ## Merge Danger
 
