@@ -118,3 +118,7 @@ O agente as carrega sozinho quando o gatilho aparece, e as skills do fluxo as ca
 Estas skills são fortemente baseadas no trabalho de [Matt Pocock](https://github.com/mattpocock/skills) com menção honrosa a [Dex Horthy](https://github.com/humanlayer/skills).
 
 Outros repositórios de skills que valem a menção: [Emil Kowalski](https://github.com/emilkowalski/skills) e [Lauren Tan (poteto)](https://github.com/cursor/plugins/tree/main/pstack/skills).
+
+## Licença
+
+[MIT](LICENSE). Copie, adapte e redistribua à vontade. Para contribuir de volta, veja [CONTRIBUTING.md](CONTRIBUTING.md).
