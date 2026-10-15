@@ -38,6 +38,8 @@ Standing instructions for the whole session:
    gh pr create --title "<title>" --body-file <file>
    ```
 
+   Before reporting CI, confirm the expected checks have registered for the current head, then wait with `gh pr checks <number> --watch --fail-fast`; do the same after every push in step 6. The watcher exits immediately with `no checks reported` when registration has not happened yet. If CI is expected, retry registration checks every 10 seconds for up to two minutes, then report CI as unconfirmed if still absent, never as passed. When the repo has no CI configured, or its workflow filters exclude this change, report checks as not applicable with that reason. Surface other command errors as errors; a failed check goes back through the fix-and-verify loop.
+
    Record the PR in the task file, as a `**PR:** <url>` line after the Status line, because the task lives outside version control and `follow-ups` reaches every PR of a feature from its tasks rather than by searching. End the turn with the PR URL. The review is the user's and always happens; the user's next message says which branch of step 6 to take.
 
 6. **Review loop.** The user returns with one of two messages:

@@ -1,6 +1,6 @@
 # PR body
 
-The body of every PR opened by `implement`. Skip preambles and keep prose brief; write in the project's glossary vocabulary.
+The body of every PR opened by `implement`. Skip preambles and keep prose brief; write in the project's glossary vocabulary, and in its documentation language, headings included, keeping this order so `review` maps each translated heading back to the template. In pt-BR: Task → Tarefa, Summary → Resumo, Evidence → Evidências, Before → Antes, After → Depois, Merge Danger → Risco do merge, Door → Porta, Blast Radius → Alcance.
 
 ```markdown
 **Task:** `<path to the task file>`
@@ -11,8 +11,8 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
 
 ## Evidence
 
-- **Before:** <the red: the failing test run, output, or screenshot>
-  **After:** <the green: the same test passing, output, or screenshot>
+- **Before:** <the failing test run, screenshot, or prior state appropriate to the change>
+  **After:** <the same test passing, screenshot, or verified new state>
 
 ## Merge Danger
 
@@ -35,7 +35,13 @@ Load the `show-me` skill and pick the form that shows what changed: a diff when 
 
 ## Evidence
 
-The change works, shown as before and after. Screenshots rank first when the change is visual and the environment can take them; execution evidence (the exact test observed red during `tdd`, then green; console output) comes next. Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
+Show before and after with evidence appropriate to the change:
+
+- **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
+- **Documentation-only changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
+- **Behaviour-preserving refactors:** identify the existing tests covering the affected interface and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
+
+Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
 
 ## Merge Danger
 

@@ -13,7 +13,7 @@ Tests verify behaviour through the interface, never implementation details: the 
 
 A **seam** is where a module's interface lives: the place where behaviour is observed without reaching inside. It is the `codebase-design` term; load that skill when the shape of the interface or the placement of the seam is itself in question. Tests live at seams.
 
-**Test only at confirmed seams.** Before the first test, list the seams under test, each with a one-line note on what it catches and what it misses, and confirm them with the user, because you cannot test everything, and agreeing the seams up front is how the effort lands on the critical paths and the complex logic instead of every edge case. Seams already recorded in the source you work from (a feature spec's Testing Decisions, a task file) count as confirmed: use them without asking again.
+**Test only at confirmed seams.** Before the first test, list the seams under test, each with a one-line note on what it catches and what it misses, and confirm them with the user, because you cannot test everything, and agreeing the seams up front is how the effort lands on the critical paths and the complex logic instead of every edge case. Seams already recorded in the source you work from (a feature spec's Testing Decisions, a task file) count as confirmed: use them without asking again. A task's **Verification** items are observations of the finished work (a CI run, a manual check), not seams: every new piece of code with logic still gets a test at its own seam, and that test stays in the diff as the red.
 
 ## The loop
 
@@ -24,7 +24,7 @@ Each cycle is one **vertical slice**: one seam, one test, one minimal implementa
 
 ## Anti-patterns
 
-Each one as code, beside its good counterpart, is in [tests.md](tests.md): read it when a test's shape is in doubt.
+Each one as code, beside its good counterpart, is in [tests.md](tests.md), with the shape of a good test (one behaviour per test, a name that says which): read it before writing the session's first test.
 
 - **Implementation-coupled**: mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behaviour has not changed.
 - **Tautological**: the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values come from an independent source of truth: a known-good literal, a worked example, the spec.
