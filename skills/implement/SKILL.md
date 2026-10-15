@@ -17,7 +17,7 @@ Standing instructions for the whole session:
 
 ## Process
 
-1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find.
+1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find. Every source (task, spec, glossary, standards, testing docs) is read whole: a tool output marked truncated (`…N tokens truncated…`) left its middle unread, so read that file again in pieces (one file per call, or `sed -n` ranges) until no output comes back truncated, because the gotchas and helpers the docs name sit anywhere in the file.
 
 2. **Branch**, when the work will change anything under version control. A feature task's branch is `<feature-name>/<NN>-<slug>`, carrying its feature as a prefix so every PR of a feature is found by that prefix (`gh pr list --search "head:<feature-name>/"`); a stand-alone task's branch is its `<slug>`:
 

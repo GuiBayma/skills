@@ -8,7 +8,7 @@ Implementa uma **task** escrita por `tasks`, com testes primeiro, por meio de um
 
 A task e a spec que ela nomeia são o objetivo; o caminho até ele é do agente, sob quatro regras permanentes: toda mudança de código passa por `tdd`, `codebase-design` é carregada sempre que uma interface ou um seam está em questão, o glossário e os ADRs do projeto são respeitados, e um PR é um ponto de espera, nunca o fim.
 
-1. **Carregar a task.** Lê a task e depois a spec. Toda task na linha Blocked by precisa estar `done`, ou a skill para. Marca o Status como `in-progress` e explora o repositório, porque tasks nomeiam módulos e interfaces, nunca arquivos.
+1. **Carregar a task.** Lê a task e depois a spec. Toda task na linha Blocked by precisa estar `done`, ou a skill para. Marca o Status como `in-progress` e explora o repositório, porque tasks nomeiam módulos e interfaces, nunca arquivos. Cada fonte é lida inteira: uma saída truncada é relida em pedaços até nenhuma voltar cortada.
 2. **Criar o branch.** `<feature-name>/<NN>-<slug>` para uma task de feature, para que todo PR de uma feature seja encontrado pelo prefixo; `<slug>` para uma avulsa. Trabalho operacional que não toca nada versionado (uma migração executada, um segredo rotacionado) pula o branch e o PR.
 3. **Implementar**, uma fatia por vez, cada fatia verde antes da próxima. O red observado em cada fatia é guardado como o "antes" do PR.
 4. **Verificar.** Cada item em Verification só é marcado depois de observado valendo.
