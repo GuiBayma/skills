@@ -38,6 +38,8 @@ Standing instructions for the whole session:
    gh pr create --title "<title>" --body-file <file>
    ```
 
+   Wait for CI in one blocking call, `gh pr checks <number> --watch --fail-fast`, rather than polling, before reporting the PR's checks; do the same after every push in step 6.
+
    Record the PR in the task file, as a `**PR:** <url>` line after the Status line, because the task lives outside version control and `follow-ups` reaches every PR of a feature from its tasks rather than by searching. End the turn with the PR URL. The review is the user's and always happens; the user's next message says which branch of step 6 to take.
 
 6. **Review loop.** The user returns with one of two messages:
