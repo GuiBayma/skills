@@ -52,7 +52,7 @@ Standing instructions for the whole session:
      gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments
      ```
 
-     Judge every point, nits included: act on each one you find valid (through `tdd` when it changes code) and push the commit. Then post one comment on the PR answering the review point by point, each with whether it was changed and why, or why it was kept, because the user decides the next round from that comment alone. Post it even when every point was kept. End the turn with the comment posted: the user decides again, and step 6 repeats until approval.
+     Judge every point, nits included: act on each one you find valid (through `tdd` when it changes code) and push the commit. Rewrite the PR body for the new head (`gh pr edit <number> --body-file <file>`): its Evidence shows the before and the after of that head, with each SHA named, and no earlier round, because `review` reads the body as the present state and the answer comment already carries the history. Then post one comment on the PR answering the review point by point, each with whether it was changed and why, or why it was kept, because the user decides the next round from that comment alone. Post it even when every point was kept. End the turn with the comment posted: the user decides again, and step 6 repeats until approval.
 
    - **Approved.** Merge with squash, delete the branch, and sync `main`:
 
