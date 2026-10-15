@@ -20,18 +20,41 @@ Standing instructions for the whole session:
 
 ## Process
 
-1. **Pin the PR.** Resolve it and bring its head to disk in a **worktree** of its own, because the sub-agents need the code around the diff and the standards files, not only the hunks, and the clone's branch and working tree belong to the `implement` session:
+1. **Pin the PR and collect standards evidence.** Resolve it and bring its head to disk in a **worktree** of its own, because the sub-agents need the code around the diff and the standards files, not only the hunks, and the clone's branch and working tree belong to the `implement` session:
 
    ```sh
    gh pr view <number> --json number,url,title,body,headRefName,headRefOid,baseRefName
    gh pr diff <number>
    git fetch origin <headRefName>
-   git worktree add --detach "$(mktemp -d)" origin/<headRefName>
+   git worktree add --detach "$(mktemp -d)" <headRefOid>
    ```
 
    An empty diff stops you here with the user told why. Keep the diff command, the PR body and the worktree path: every sub-agent gets all three, reads code in the worktree, and reads the task and spec (outside version control, so absent from the worktree) in this clone.
 
-   If the repo documents a CI metric report as a standard, use `gh pr checks <number>` to locate its run, then read the report from the job summary or artifact (or the job log when it contains the same table). Match the run's commit to the pinned PR head; a report from another commit cannot describe this diff. Keep the report, its source URL and commit, and the documented attention ranges and failure thresholds for Standards. If the report is pending, missing or inaccessible, record that limitation for the review comment rather than treating it as clean.
+   **Read the standards sources.** In the worktree, read every file that documents how code is written here, starting from this list and searching `docs/` and `README.md` for more:
+
+   - `AGENTS.md` or `CLAUDE.md`, at the root and in every directory the diff touches.
+   - `GLOSSARY.md` for the context the diff touches (through `GLOSSARY-MAP.md` when it exists), because names in the diff use the canonical terms.
+   - `docs/adr/` for the area touched (plus the root one when there is a map).
+   - `CONTRIBUTING.md` and `CODING_STANDARDS.md` when present.
+
+   Every PR opened by `implement` also answers to the **house standards**, whether or not the repo documents them, carried by the sibling skills beside this one (resolve their paths from this skill's directory and pass them absolute): `../tdd/SKILL.md`, `../tdd/tests.md` and `../tdd/mocking.md` (tests cross the interface, red observed before green, doubles only where the code leaves the process); `../codebase-design/SKILL.md` (deep modules, the deletion test, two adapters or no seam); `../implement/PR.md` (the PR body: Summary, Evidence appropriate to the change as defined there, Merge Danger). Add the smell baseline in [SMELLS.md](./SMELLS.md). The repo overrides: a documented repo standard wins over a house standard or a smell, and anything tooling already enforces is skipped, except for the documented metric attention ranges handled in the Standards brief.
+
+   **Collect metric reports.** From those standards, identify every metric check or package covering files touched by the diff. For each, keep its documented attention ranges and failure thresholds, and locate its run and job through the PR checks:
+
+   ```sh
+   gh pr checks <number>
+   gh run view <run-id> --json headSha,status,jobs,url
+   ```
+
+   Match each run's `headSha` to the pinned `headRefOid`, then read the documented report from its job log or artifact:
+
+   ```sh
+   gh run view <run-id> --job <job-id> --log
+   gh run download <run-id> --name <artifact-name> --dir <temporary-directory>
+   ```
+
+   Use the source documented by the repo; a log is suitable when it contains the report's table. The job summary URL can cite the source, but `gh` does not retrieve its contents. Keep each report with its check or package, source URL and commit, so Standards can account for all touched files covered by a documented metric. A required report that is pending, missing, from another commit or inaccessible becomes a limitation for that check or package; pass available reports alongside those limitations. Collection is complete when each required report is either available for this head or accounted for by a limitation. A repo without a documented metric report needs no metric collection.
 
    Then read the PR's history from the three places a review lands, because earlier rounds, and the implementer's answers to them, decide what is settled:
 
@@ -51,21 +74,12 @@ Standing instructions for the whole session:
 
    Read the task in full, then the file on its **Spec** line when it has one. A task is one slice of its spec, so the spec supplies context and the task sets the scope. When the user says there is no task, the Spec sub-agent is skipped and the comment says so under `## Spec`.
 
-3. **Find the standards sources.** Collect every file that documents how code is written here, starting from this list and searching `docs/` and `README.md` for more:
+3. **Dispatch both sub-agents** together, in parallel, each with the diff command, the PR body, the settled and claimed points, and the paths of its sources; Standards also gets each metric report with its check or package, URL, commit and documented ranges, plus every collection limitation from step 1. Wait for both. Each returns under 400 words, findings plus any metric collection limitations: settled points stay out, and a claimed point the diff does not bear out comes back as a finding.
 
-   - `AGENTS.md` or `CLAUDE.md`, at the root and in every directory the diff touches.
-   - `GLOSSARY.md` for the context the diff touches (through `GLOSSARY-MAP.md` when it exists), because names in the diff use the canonical terms.
-   - `docs/adr/` for the area touched (plus the root one when there is a map).
-   - `CONTRIBUTING.md` and `CODING_STANDARDS.md` when present.
-
-   Every PR opened by `implement` also answers to the **house standards**, whether or not the repo documents them, carried by the sibling skills beside this one (resolve their paths from this skill's directory and pass them absolute): `../tdd/SKILL.md`, `../tdd/tests.md` and `../tdd/mocking.md` (tests cross the interface, red observed before green, doubles only where the code leaves the process); `../codebase-design/SKILL.md` (deep modules, the deletion test, two adapters or no seam); `../implement/PR.md` (the PR body: Summary, Evidence appropriate to the change as defined there, Merge Danger). Add the smell baseline in [SMELLS.md](./SMELLS.md). The repo overrides: a documented repo standard wins over a house standard or a smell, and violations tooling already enforces are skipped. A documented metric's non-failing attention range remains a judgement for Standards, using the report collected in step 1; values that fail the automated gate stay with CI.
-
-4. **Dispatch both sub-agents** together, in parallel, each with the diff command, the PR body, the settled and claimed points, and the paths of its sources; Standards also gets the metric report, its URL and commit, the repo's ranges, or the retrieval limitation from step 1. Wait for both. Each returns under 400 words, findings only: settled points stay out, and a claimed point the diff does not bear out comes back as a finding.
-
-   - **Standards brief**: read every source, then report each place the diff breaches a documented standard, citing the file and the rule, and each baseline smell, naming it and quoting the hunk. Mark each finding **hard** (a documented standard, repo or house, breached) or **judgement** (a smell or a metric in its documented attention range: always a heuristic). Check the PR body against `PR.md`: every section present, and the Evidence's before and after satisfy the category of change defined there and are traceable to the branch. A test it names exists there, new or already present; documentation evidence and refactor verification follow their respective criteria in `PR.md`. Cross the metric report with the diff by file, namespace and function: report every function touched by the diff whose value is in the repo's non-failing attention range as **judgement**, citing its value, the report URL, the repo standard and a concrete inspection or simplification to consider. A function is touched when its body or declaration changes, not merely another function in the same file. Apply the repo's exact range boundaries; functions outside the attention range stay out of metric findings. Include any retrieval limitation in the Standards report.
+   - **Standards brief**: read every source, then report each place the diff breaches a documented standard, citing the file and the rule, and each baseline smell, naming it and quoting the hunk. Mark each finding **hard** (a documented standard, repo or house, breached) or **judgement** (a smell or a metric in its documented attention range: always a heuristic). Check the PR body against `PR.md`: every section present, and the Evidence's before and after satisfy the category of change defined there and are traceable to the branch. A test it names exists there, new or already present; documentation evidence and refactor verification follow their respective criteria in `PR.md`. For each documented metric report, cross its entries with the diff by file and function (or the unit the report measures, using qualified names when available): report every touched function or unit whose value is in the repo's non-failing attention range as **judgement**, citing its value, the report URL, the repo standard and a concrete inspection or simplification to consider. A function is touched when its body or declaration changes, not merely another function in the same file. Apply the repo's exact range boundaries; values that fail the automated gate stay with CI, and other values outside the attention range stay out of metric findings. Return each collection limitation separately from findings using the Standards line in `COMMENT.md`, including when there are no findings.
    - **Spec brief**: read the task, then its spec, then report (a) what the task's **Delivers**, **Context** decisions and **Verification** items ask for that the diff leaves missing or partial, including a ticked item the diff does not make hold; (b) behaviour the diff adds that the task did not ask for, with the spec's **Out of Scope** as the sharpest test; (c) requirements that look implemented but whose implementation looks wrong; (d) the PR body's **Merge Danger** judged against the diff: a door or blast radius the diff contradicts. Mark each finding **missing**, **partial**, **creep** or **wrong**, and quote the task or spec line it rests on.
 
-5. **Publish.** Write the comment in the format of [COMMENT.md](./COMMENT.md), each report under its own heading, verbatim or lightly cleaned, findings numbered within each axis, and post it:
+4. **Publish.** Write the comment in the format of [COMMENT.md](./COMMENT.md), each report under its own heading, verbatim or lightly cleaned, findings numbered within each axis and metric collection limitations retained as separate lines under Standards even when there are no findings, and post it:
 
    ```sh
    gh pr comment <number> --body-file <file>
