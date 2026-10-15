@@ -8,6 +8,7 @@ The one comment `review` posts on the PR. Both headings always appear; a number 
 1. **hard** | **judgement** — `<file>:<line>`: <what is wrong>. Standard: <file and rule, or the smell's name>. Fix: <what to do>.
 
 _No findings._ (when the axis is clean)
+_Metric report unavailable for <check/package>: <reason>._ (one line per collection limitation, alongside findings or "No findings"; not a numbered finding)
 
 ## Spec
 
