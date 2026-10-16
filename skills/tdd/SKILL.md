@@ -24,7 +24,7 @@ Each cycle is one **vertical slice**: one seam, one test, one minimal implementa
 
 ## Anti-patterns
 
-Each one as code, beside its good counterpart, is in [tests.md](tests.md), with the shape of a good test (one behaviour per test, a name that says which): read it before writing the session's first test.
+Each one as code, beside its good counterpart, is in [tests.md](tests.md), with the shape of a good test (one behaviour per test, a name that says which): read it when a test's shape is in doubt.
 
 - **Implementation-coupled**: mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behaviour has not changed.
 - **Tautological**: the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values come from an independent source of truth: a known-good literal, a worked example, the spec.

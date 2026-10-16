@@ -75,7 +75,7 @@ Repito até mergear.
 
 ### Melhoria do processo
 
-Após mergear um PR e finalizar uma task, seja de uma feature ou avulsa, eu sempre rodo a skill `retro`. Ela analisa o processo em si, melhorando skills e scripts. É de onde vem a minha maior economia de tokens com agentes até o momento. Recomendo.
+Após mergear um PR e finalizar uma task, seja de uma feature ou avulsa, eu sempre rodo a skill `retro`. Ela analisa o processo em si, melhorando o ambiente em que os agentes trabalham: checks, arquivos de steering, ferramentas e acesso a informação. É de onde vem a minha maior economia de tokens com agentes até o momento. Recomendo.
 
 ### Follow-ups
 
@@ -98,7 +98,7 @@ Invocadas pelo nome (`/nome`); o agente nunca as dispara sozinho.
 | [implement](skills/implement/README.md) | Implementa uma task com testes primeiro, por meio de um PR revisado pelo usuário até o merge |
 | [review](skills/review/README.md) | Revisa um PR em dois eixos, Standards e Spec, e publica um único comentário |
 | [follow-ups](skills/follow-ups/README.md) | Depois da última task de uma feature, caça os pontos adiados nos PRs e os triagem em tasks ou descartes |
-| [retro](skills/retro/README.md) | Retrospectiva do ciclo por trás de um PR mergeado, propondo uma edição no arquivo dono de cada achado |
+| [retro](skills/retro/README.md) | Retrospectiva do ciclo por trás de um PR mergeado, propondo melhorias no ambiente do agente, cada uma no arquivo dono do achado |
 
 ## Skills de invocação automática
 
