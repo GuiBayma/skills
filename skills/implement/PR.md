@@ -1,6 +1,6 @@
 # PR body
 
-The body of every PR opened by `implement`. Skip preambles and keep prose brief; write in the project's glossary vocabulary, and in its documentation language, headings included, keeping this order so `review` maps each translated heading back to the template. In pt-BR: Task → Tarefa, Summary → Resumo, Evidence → Evidências, Before → Antes, After → Depois, Merge Danger → Risco do merge, Door → Porta, Blast Radius → Alcance.
+The body of every PR opened by `implement`. Skip preambles and keep prose brief; write in the project's glossary vocabulary and in its documentation language, headings included, keeping the sections in this order so `review` finds each one.
 
 ```markdown
 **Task:** `<path to the task file>`
@@ -42,7 +42,7 @@ Show before and after with evidence appropriate to the change:
 - **Documentation-only changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
 - **Behaviour-preserving refactors:** identify the existing tests covering the affected interface and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
 
-Quote the red you saw at the time in a `text` block under its **Before**: the command, the failing lines, and the exit code, because it cannot be reproduced once the code is green.
+Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
 
 ## Merge Danger
 

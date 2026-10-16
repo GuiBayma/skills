@@ -17,7 +17,7 @@ Standing instructions for the whole session:
 
 ## Process
 
-1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find. Every source (task, spec, glossary, standards, testing docs) is read whole: a tool output marked truncated (`…N tokens truncated…`) left its middle unread, so read that file again in pieces (one file per call, or `sed -n` ranges) until no output comes back truncated, because the gotchas and helpers the docs name sit anywhere in the file.
+1. **Load the task.** Read the task file in full, then the spec on its **Spec** line when it has one. Open each task on its **Blocked by** line and check its Status is `done`; a blocker still open stops you here, with the user told which one, because the task was cut assuming its blockers' work is in place. Set the task's Status to `in-progress`. Explore the repo until you know the current state of the code the task touches, because the task names modules and interfaces, never files, and the file layout is yours to find.
 
 2. **Branch**, when the work will change anything under version control. A feature task's branch is `<feature-name>/<NN>-<slug>`, carrying its feature as a prefix so every PR of a feature is found by that prefix (`gh pr list --search "head:<feature-name>/"`); a stand-alone task's branch is its `<slug>`:
 
@@ -38,7 +38,7 @@ Standing instructions for the whole session:
    gh pr create --title "<title>" --body-file <file>
    ```
 
-   Before reporting CI, confirm the expected checks have registered for the current head, then start one `gh pr checks <number> --watch --fail-fast` watcher and wait for its exit code; do the same after every push in step 6. In Codex, `yield_time_ms` controls when the tool returns, not the command's lifetime: if it returns a `session_id`, continue that same session with `write_stdin`, empty input, and a blocking wait until the watcher exits. The watcher already waits between checks, so continuing its session needs no additional `sleep` or new watcher. The watcher exits immediately with `no checks reported` when registration has not happened yet. If CI is expected, retry registration checks every 10 seconds for up to two minutes, then report CI as unconfirmed if still absent, never as passed. When the repo has no CI configured, or its workflow filters exclude this change, report checks as not applicable with that reason. Surface other command errors as errors; a failed check goes back through the fix-and-verify loop.
+   Report the CI result you observed for this head (`gh pr checks <number> --watch --fail-fast` waits for it), and again after every push in step 6: a failed check goes back through the fix-and-verify loop, and checks still absent are reported as absent, never as passed, because the user merges on that report.
 
    Record the PR in the task file, as a `**PR:** <url>` line after the Status line, because the task lives outside version control and `follow-ups` reaches every PR of a feature from its tasks rather than by searching. End the turn with the PR URL. The review is the user's and always happens; the user's next message says which branch of step 6 to take.
 
@@ -52,7 +52,7 @@ Standing instructions for the whole session:
      gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments
      ```
 
-     Judge every point, nits included: act on each one you find valid (through `tdd` when it changes code) and push the commit. Rewrite the PR body for the new head (`gh pr edit <number> --body-file <file>`): its Evidence shows the before and the after of that head, with each SHA named, and no earlier round, because `review` reads the body as the present state and the answer comment already carries the history. Then post one comment on the PR answering the review point by point, each with whether it was changed and why, or why it was kept, because the user decides the next round from that comment alone. Post it even when every point was kept. End the turn with the comment posted: the user decides again, and step 6 repeats until approval.
+     Judge every point, nits included: act on each one you find valid (through `tdd` when it changes code) and push the commit. Update the PR body so it describes the new head (`gh pr edit <number> --body-file <file>`), because `review` reads the body as the present state. Then post one comment on the PR answering the review point by point, each with whether it was changed and why, or why it was kept, because the user decides the next round from that comment alone. Post it even when every point was kept. End the turn with the comment posted: the user decides again, and step 6 repeats until approval.
 
    - **Approved.** Merge with squash, delete the branch, and sync `main`:
 
