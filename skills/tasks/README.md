@@ -6,7 +6,7 @@ Quebra uma fonte (a conversa atual, um plano, ou uma spec de feature) em **tasks
 
 ## O que é uma task
 
-Uma fatia tracer bullet: uma entrega que uma sessão nova consegue terminar, que cabe em um PR, e que declara as tasks que a **bloqueiam**. Uma task pode ser operacional (uma migração executada, um segredo rotacionado, um dashboard configurado) e não tocar nada versionado; a entrega continua observável. Tasks nomeiam módulos e interfaces, nunca arquivos, e são escritas no vocabulário do glossário do projeto.
+Uma fatia tracer bullet: uma entrega que uma sessão nova consegue terminar, que cabe em um PR, e que declara as tasks que a **bloqueiam**. Uma task pode ser operacional (uma migração executada, um segredo rotacionado, um dashboard configurado) e não tocar nada versionado; a entrega continua observável. Tasks nomeiam módulos e interfaces, nunca arquivos, e são escritas no vocabulário do glossário do projeto. Cada item de verificação descreve um comportamento observável; onde o teste mora fica com os docs de teste do repositório.
 
 ## Onde vivem
 
@@ -26,7 +26,7 @@ Os dois diretórios são anotação de trabalho, adicionados ao `.gitignore` qua
 7. **Revisar com o usuário**: o corte como lista numerada mais o delta. A granularidade está certa, cada aresta é um bloqueio real, alguma task deveria unir ou dividir? Itera até a aprovação.
 8. **Escrever os arquivos**, um por task, no template de `CUTTING.md`.
 
-Termina quando as tasks aprovadas estão em disco, toda decisão da fonte é carregada por alguma task, e o delta foi mostrado. O trabalho então avança pela fronteira: qualquer task cujos bloqueios estão todos prontos pode começar, via `implement`.
+Termina quando as tasks aprovadas estão em disco, toda decisão da fonte é carregada por alguma task, nenhuma task contradiz sua spec, e o delta foi mostrado. O trabalho então avança pela fronteira: qualquer task cujos bloqueios estão todos prontos pode começar, via `implement`.
 
 ## Arquivos
 
