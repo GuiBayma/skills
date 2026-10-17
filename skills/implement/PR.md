@@ -20,7 +20,7 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
 
 <optional: why>
 
-**Blast Radius:** <one-word description>
+**Blast Radius:** <every surface the merge reaches>
 
 <optional: what the merge can reach>
 ```
