@@ -14,7 +14,7 @@ The rules for cutting a brief into tasks, and the file each task is written to. 
 
 ## Writing a task
 
-Write what the task delivers from the user's perspective, never a layer-by-layer implementation list. Name modules and interfaces rather than file paths or code snippets, because paths and snippets go stale fast. Exception: when a prototype produced a snippet that encodes a decision more precisely than prose can (a state machine, a reducer, a schema, a type shape), inline it trimmed to the decision-rich parts and note that it came from a prototype.
+Write what the task delivers from the user's perspective, never a layer-by-layer implementation list. Name modules and interfaces rather than file paths or code snippets, because paths and snippets go stale fast. Exception: when a prototype produced a snippet that encodes a decision more precisely than prose can (a state machine, a reducer, a schema, a type shape), inline it trimmed to the decision-rich parts and note that it came from a prototype. Write each verification item as an observable behaviour and leave where its test lives to the repo's testing docs, because the implementing session follows them and a harness named in the task overrides them.
 
 The task file is the whole context of the session that works it, so the **Context** section carries every decision from the brief that the task depends on; a feature task names its spec in the **Spec** line and carries in Context only what the spec leaves implicit.
 

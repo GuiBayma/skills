@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Tasks
 
-Break a source (the current conversation, a plan, or a feature spec) into **tasks**: tracer-bullet slices, each a deliverable a fresh session can finish and that fits one PR, each declaring the tasks that **block** it. A task may be operational (a migration run, a secret rotated, a dashboard configured) and touch nothing under version control; the deliverable is still observable. Done when the approved tasks are on disk, one file per task in the template of [CUTTING.md](./CUTTING.md), every decision in the source is carried by some task, and the **delta** against the adversarial cut was shown to the user.
+Break a source (the current conversation, a plan, or a feature spec) into **tasks**: tracer-bullet slices, each a deliverable a fresh session can finish and that fits one PR, each declaring the tasks that **block** it. A task may be operational (a migration run, a secret rotated, a dashboard configured) and touch nothing under version control; the deliverable is still observable. Done when the approved tasks are on disk, one file per task in the template of [CUTTING.md](./CUTTING.md), every decision in the source is carried by some task and no task's Context or Verification contradicts its spec, and the **delta** against the adversarial cut was shown to the user.
 
 Read [CUTTING.md](./CUTTING.md) before drafting: it holds the cutting rules and the task template, and it is the single source both you and the adversarial sub-agent cut by.
 
