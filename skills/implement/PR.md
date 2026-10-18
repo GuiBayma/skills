@@ -37,7 +37,7 @@ Load the `show-me` skill and pick the form that shows what changed: a diff when 
 
 ## Evidence
 
-List the seams `tdd` chose, each with what it catches and what it misses, because the user saw none of them before the code was written and weighs them here, against the tests that cross them. Drop the line when no test changed (documentation, configuration, operational work).
+List the seams `tdd` chose, each with what it catches and what it misses, because the user saw none of them before the code was written and weighs them here, against the tests that cross them. Keep the line whenever a test carries the evidence, new or already present (an existing test that reproduces the problem, the suite that covers a refactor), and drop it only when no test does (documentation, configuration).
 
 Show before and after with evidence appropriate to the change:
 
