@@ -23,13 +23,14 @@ Standing instructions for the whole session:
 1. **Pin the PR and read the standards.** Resolve it and bring its head to disk in a **worktree** of its own, because the sub-agents need the code around the diff and the standards files, not only the hunks, and the clone's branch and working tree belong to the `implement` session:
 
    ```sh
-   gh pr view <number> --json number,url,title,body,headRefName,headRefOid,baseRefName
+   gh pr view <number> --json number,url,title,headRefName,headRefOid,baseRefName
+   gh pr view <number> --json body -q .body > <body file>
    gh pr diff <number>
    git fetch origin <headRefName>
    git worktree add --detach "$(mktemp -d)" <headRefOid>
    ```
 
-   An empty diff stops you here with the user told why. Keep the diff command, the PR body and the worktree path: every sub-agent gets all three, reads code in the worktree, and reads the task and spec (outside version control, so absent from the worktree) in this clone.
+   An empty diff stops you here with the user told why. Keep the diff command, the body file and the worktree path: every sub-agent gets all three and reads the body from its file, because a long body read inline overflows the tool output and each sub-agent would page it again; it reads code in the worktree, and reads the task and spec (outside version control, so absent from the worktree) in this clone.
 
    **Read the standards sources.** In the worktree, read every file that documents how code is written here, starting from this list and searching `docs/` and `README.md` for more:
 
@@ -45,7 +46,7 @@ Standing instructions for the whole session:
    Then read the PR's history from the three places a review lands, because earlier rounds, and the implementer's answers to them, decide what is settled:
 
    ```sh
-   gh pr view <number> --comments
+   gh api --paginate repos/{owner}/{repo}/issues/<number>/comments
    gh api --paginate repos/{owner}/{repo}/pulls/<number>/reviews
    gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments
    ```
@@ -60,7 +61,7 @@ Standing instructions for the whole session:
 
    Read the task in full, then the file on its **Spec** line when it has one. A task is one slice of its spec, so the spec supplies context and the task sets the scope. When the user says there is no task, the Spec sub-agent is skipped and the comment says so under `## Spec`.
 
-3. **Dispatch both sub-agents** together, in parallel, each with the diff command, the PR body, the settled and claimed points, and the paths of its sources; Standards also gets the metric reports and limitations from step 1. Wait for both. Each returns under 400 words, findings only: settled points stay out, and a claimed point the diff does not bear out comes back as a finding.
+3. **Dispatch both sub-agents** together, in parallel, each with the diff command, the body file, the settled and claimed points, and the paths of its sources; Standards also gets the metric reports and limitations from step 1. Wait for both. Each returns under 400 words, findings only: settled points stay out, and a claimed point the diff does not bear out comes back as a finding.
 
    - **Standards brief**: read every source, then report each place the diff breaches a documented standard, citing the file and the rule, and each baseline smell, naming it and quoting the hunk. Mark each finding **hard** (a documented standard, repo or house, breached) or **judgement** (a smell or a metric in its documented attention range: always a heuristic). Check the PR body against `PR.md`: every section present, and the Evidence's before and after satisfy the category of change defined there and are traceable to the branch. A test it names exists there, new or already present; documentation evidence and refactor verification follow their respective criteria in `PR.md`. From each metric report, report as **judgement** every unit the diff touches whose value sits in the repo's documented attention range, with its value, the report's source and a concrete simplification to consider; values that fail the automated gate stay with CI. Return each collection limitation on its own line, as `COMMENT.md` shapes it, even when there are no findings.
    - **Spec brief**: read the task, then its spec, then report (a) what the task's **Delivers**, **Context** decisions and **Verification** items ask for that the diff leaves missing or partial, including a ticked item the diff does not make hold; (b) behaviour the diff adds that the task did not ask for, with the spec's **Out of Scope** as the sharpest test; (c) requirements that look implemented but whose implementation looks wrong; (d) the PR body's **Merge Danger** judged against the diff: a door or blast radius the diff contradicts. Mark each finding **missing**, **partial**, **creep** or **wrong**, and quote the task or spec line it rests on.
