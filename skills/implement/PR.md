@@ -11,6 +11,8 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
 
 ## Evidence
 
+**Seams:** <each seam under test, with what it catches and what it misses>
+
 - **Before:** <the failing test run, screenshot, or prior state appropriate to the change>
   **After:** <the same test passing, screenshot, or verified new state>
 
@@ -34,6 +36,8 @@ The path of the task file as the user passed it, because the task lives outside 
 Load the `show-me` skill and pick the form that shows what changed: a diff when the surrounding shape already exists, a tree or pseudocode when most of it is new. Place each visual beside the short text it supports.
 
 ## Evidence
+
+List the seams `tdd` chose, each with what it catches and what it misses, because the user saw none of them before the code was written and weighs them here, against the tests that cross them. Keep the line whenever a test carries the evidence, new or already present (an existing test that reproduces the problem, the suite that covers a refactor), and drop it only when no test does (documentation, configuration).
 
 Show before and after with evidence appropriate to the change:
 
