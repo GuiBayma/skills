@@ -109,7 +109,7 @@ O agente as carrega sozinho quando o gatilho aparece, e as skills do fluxo as ca
 | [grilling](skills/grilling/README.md) | Entrevista o usuário implacavelmente sobre um plano ou decisão, uma pergunta por vez, até um entendimento compartilhado |
 | [codebase-design](skills/codebase-design/README.md) | Vocabulário e princípios compartilhados para projetar módulos profundos em seams limpos |
 | [domain-modeling](skills/domain-modeling/README.md) | Mantém o glossário e os ADRs do projeto afiados durante o design |
-| [tdd](skills/tdd/README.md) | O ciclo red → green, uma fatia por vez, todo teste em um seam confirmado |
+| [tdd](skills/tdd/README.md) | O ciclo red → green, uma fatia por vez, todo teste em um seam escolhido |
 | [show-me](skills/show-me/README.md) | Mostra um ponto visualmente com a menor vista que o deixa claro |
 | [writing-for-agents](skills/writing-for-agents/README.md) | Como escrever skills, arquivos de steering e qualquer documento que um agente lê |
 

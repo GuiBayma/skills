@@ -1,6 +1,6 @@
 # tdd
 
-Desenvolvimento guiado por testes como um ciclo **red → green**, uma fatia por vez, todo teste em um **seam** confirmado.
+Desenvolvimento guiado por testes como um ciclo **red → green**, uma fatia por vez, todo teste em um **seam** escolhido.
 
 **Invocação:** automática. Dispara em "TDD", "red-green-refactor", em construir uma feature ou corrigir um bug com testes primeiro, e em querer testes que sobrevivam a refatorações. `implement` a carrega antes da primeira mudança de código, e `review` a lê como padrão da casa.
 
@@ -10,7 +10,7 @@ Testes verificam comportamento pela interface, nunca detalhes de implementação
 
 ## Seams
 
-Um seam é onde a interface de um módulo vive (o termo de `codebase-design`). Testes vivem só em seams **confirmados**: antes do primeiro teste, os seams sob teste são listados, cada um com o que pega e o que deixa passar, e confirmados com o usuário, para que o esforço caia nos caminhos críticos e na lógica complexa em vez de em todo caso de borda. Seams já registrados nas Testing Decisions de uma spec ou em um arquivo de task contam como confirmados.
+Um seam é onde a interface de um módulo vive (o termo de `codebase-design`). Testes vivem só em seams **escolhidos**: antes do primeiro teste, o agente escolhe os seams sob teste, cada um com o que pega e o que deixa passar, para que o esforço caia nos caminhos críticos e na lógica complexa em vez de em todo caso de borda. Seams já registrados nas Testing Decisions de uma spec ou em um arquivo de task vêm primeiro; para o resto, um seam existente tem preferência sobre um novo, e o mais alto em que o comportamento é observável é o escolhido. O agente segue sem perguntar e leva a lista para o relato do trabalho (o corpo do PR, quando `implement` abre um), onde o usuário pesa os seams junto com os testes que os cruzam.
 
 ## O ciclo
 
@@ -19,7 +19,7 @@ Cada ciclo é uma fatia vertical: um seam, um teste, uma implementação mínima
 1. **Red.** Escrever um teste e rodá-lo. O red é observado, nunca assumido: a falha precisa ser o comportamento que o teste nomeia faltando, não um erro de digitação ou um import errado. Para um bug, o red é um teste que o reproduz no seam e fica como guarda de regressão.
 2. **Green.** Escrever só o código suficiente para deixá-lo verde. Rodar o teste, depois a suíte.
 
-Termina quando toda fatia foi observada red antes de green, todo teste está em um seam confirmado, e nenhum teste bate com um anti-padrão.
+Termina quando toda fatia foi observada red antes de green, todo teste está em um seam escolhido, e nenhum teste bate com um anti-padrão.
 
 ## Anti-padrões
 

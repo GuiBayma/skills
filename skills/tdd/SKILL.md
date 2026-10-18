@@ -5,7 +5,7 @@ description: Test-driven development, the red → green loop. Use when the user 
 
 # Test-driven development
 
-Build in the **red → green** loop, one **slice** at a time, every test at a confirmed **seam**. Standing instructions for the whole session, applied on every cycle. Done when every slice was observed red before it went green, every test sits at a confirmed seam, and no test matches an anti-pattern below.
+Build in the **red → green** loop, one **slice** at a time, every test at a chosen **seam**. Standing instructions for the whole session, applied on every cycle. Done when every slice was observed red before it went green, every test sits at a chosen seam, and no test matches an anti-pattern below.
 
 Tests verify behaviour through the interface, never implementation details: the code can change entirely and the tests stay. A good test reads like a specification ("user can checkout with valid cart" says exactly which capability exists) and survives refactors because it never reaches inside. Name tests and interfaces in the project's glossary vocabulary and respect the ADRs in the area you touch; load the `domain-modeling` skill for where they live.
 
@@ -13,7 +13,7 @@ Tests verify behaviour through the interface, never implementation details: the 
 
 A **seam** is where a module's interface lives: the place where behaviour is observed without reaching inside. It is the `codebase-design` term; load that skill when the shape of the interface or the placement of the seam is itself in question. Tests live at seams.
 
-**Test only at confirmed seams.** Before the first test, list the seams under test, each with a one-line note on what it catches and what it misses, and confirm them with the user, because you cannot test everything, and agreeing the seams up front is how the effort lands on the critical paths and the complex logic instead of every edge case. Seams already recorded in the source you work from (a feature spec's Testing Decisions, a task file) count as confirmed: use them without asking again. A task's **Verification** items are observations of the finished work (a CI run, a manual check), not seams: every new piece of code with logic still gets a test at its own seam, and that test stays in the diff as the red.
+**Test only at chosen seams.** Before the first test, choose the seams under test yourself, each with a one-line note on what it catches and what it misses, because you cannot test everything, and naming the seams up front is how the effort lands on the critical paths and the complex logic instead of every edge case. Seams already recorded in the source you work from (a feature spec's Testing Decisions, a task file) come first; for the rest, prefer an existing seam to a new one and take the highest seam the behaviour is observable at. Go straight on to the first test and carry the list into the report of the work (the PR body, when `implement` opens one), because the user weighs the seams there, against the tests that cross them. A task's **Verification** items are observations of the finished work (a CI run, a manual check), not seams: every new piece of code with logic still gets a test at its own seam, and that test stays in the diff as the red.
 
 ## The loop
 
