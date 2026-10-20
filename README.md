@@ -59,27 +59,9 @@ tasks ──▶ implement ◀──▶ review
  steering, tasks
 ```
 
-Em uma sessão nova eu rodo a implement apontando para uma task: `/implement docs/features/<nome-da-feature>/tasks/01-first-task.md`.
+O desenvolvedor abre o PR; um revisor fresco publica uma review; o desenvolvedor responde; você aprova ou pede outra review, até o merge. Toda task mergeada passa pela `retro`, que melhora o ambiente em que os agentes trabalham (checks, arquivos de steering, ferramentas e acesso a informação) e é de onde vem a minha maior economia de tokens com agentes até o momento. A última task de uma feature passa também pela `follow-ups`, que caça os pontos adiados nos PRs da feature e os triagem em tasks ou descartes.
 
-O agente vai desenvolver usando as skills `tdd` e `codebase-design`. Dentro da `tdd` é um bom lugar para colocar exemplos de testes e mocks da sua linguagem favorita. Ironicamente esse repo usa TypeScript, que não é a minha favorita.
-
-A skill `implement` vai seguir até abrir um PR, e nesse ponto eu abro uma nova sessão - sem fechar a sessão do agente que implementou - e rodo a `review` apontando para o número do PR.
-
-Quando a review é postada eu informo diretamente o agente desenvolvedor, que vai avaliar e corrigir qualquer ponto levantado e espero a resposta dele no PR. Você pode levantar seus próprios pontos de correção.
-
-Quando o desenvolvedor posta a resposta dele eu tomo uma de duas decisões:
-- Aprovar o PR, falando diretamente com o desenvolvedor que ele pode mergear
-- Rodo uma nova review, com um novo agente. A sessão do agente que fez a primeira review pode ser encerrada.
-
-Repito até mergear.
-
-### Melhoria do processo
-
-Após mergear um PR e finalizar uma task, seja de uma feature ou avulsa, eu sempre rodo a skill `retro`. Ela analisa o processo em si, melhorando o ambiente em que os agentes trabalham: checks, arquivos de steering, ferramentas e acesso a informação. É de onde vem a minha maior economia de tokens com agentes até o momento. Recomendo.
-
-### Follow-ups
-
-Quando eu termino a última task de uma feature, após rodar a `retro` eu rodo também a `follow-ups`. O papel dela é achar tarefas que ficaram para trás em todos os PRs da feature. Isso pode acontecer por diversos motivos, o mais comum é o revisor levantar algo válido, mas o desenvolvedor adiar por fugir ao escopo da tarefa.
+Cada estado desse ciclo, com a sessão, o prompt e a decisão que o move adiante, está em [`WORKFLOW.md`](WORKFLOW.md).
 
 ### Melhorias de code base
 
