@@ -43,8 +43,8 @@ Show before and after for every category below that the change falls into, becau
 
 - **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
 - **Configuration and CI wiring** (a build script, a workflow step, an ignore list): the **Before** is the command observed failing (a missing target, a red lint, a temporary probe made to fail and then reverted), and the **After** is the same command green.
-- **Documentation-only changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
-- **Behaviour-preserving refactors:** identify the existing tests covering the affected interface and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
+- **Documentation changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
+- **Behaviour-preserving refactors:** cite the existing tests covering the affected interface by path and test name and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
 
 Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
 
