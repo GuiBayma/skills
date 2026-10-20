@@ -38,7 +38,7 @@ Standing instructions for the whole session:
    gh pr create --title "<title>" --body-file <file>
    ```
 
-   Report the CI result you observed for this head (`gh pr checks <number> --watch --fail-fast` waits for it), and again after every push in step 6: a failed check goes back through the fix-and-verify loop, and checks still absent are reported as absent, never as passed, because the user merges on that report.
+   Report the CI result you observed for this head, once every check has finished, and again after every push in step 6: a failed check goes back through the fix-and-verify loop, and checks still absent are reported as absent, never as passed, because the user merges on that report.
 
    Record the PR in the task file, as a `**PR:** <url>` line after the Status line, because the task lives outside version control and `follow-ups` reaches every PR of a feature from its tasks rather than by searching. End the turn with the PR URL. The review is the user's and always happens; the user's next message says which branch of step 6 to take.
 
