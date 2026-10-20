@@ -4,7 +4,7 @@ Este documento descreve o fluxo de trabalho completo das skills deste repositór
 
 Duas regras valem em todos os estados:
 
-- **Uma sessão por etapa.** Cada skill de etapa roda em uma sessão nova. A única sessão que vive mais de uma etapa é a do desenvolvedor, que nasce na `implement` e morre no merge.
+- **Planejar na mesma sessão, executar em sessão nova.** As skills de planejamento (`grilling`, `wayfinder`, `feature` e `tasks` quando a fonte é a conversa) trabalham sobre a conversa em curso e por isso ficam na sessão em que ela aconteceu. As skills de execução (`tasks` a partir de uma SPEC, `implement`, `review`, `retro`, `follow-ups`) rodam cada uma em uma sessão nova, porque a entrada delas está em arquivos ou no PR. A única sessão de execução que vive mais de uma etapa é a do desenvolvedor, que nasce na `implement` e morre no merge.
 - **Uma task por vez.** Planejamento (features, mapas, tasks avulsas) pode nascer em paralelo, mas o desenvolvimento é serializado.
 
 ## Visão geral
@@ -26,14 +26,15 @@ stateDiagram-v2
     Retro --> Tasks: novas tasks
     Retro --> FollowUps: última task da feature
     Retro --> Tasks: próxima task
-    FollowUps --> Tasks: novas tasks ou próxima feature
+    FollowUps --> Tasks: novas tasks
+    FollowUps --> Conversa: próxima feature, via wayfinder
 ```
 
 ## Etapas
 
 | Estado | Skill | Sessão | Prompt | Entrada | Saída | Quem decide a transição |
 | --- | --- | --- | --- | --- | --- | --- |
-| Conversa | nenhuma, `grilling` ou `wayfinder` | nova | `Eu quero resolver ...`, `/grilling ...` ou `/wayfinder ...` | um problema | entendimento compartilhado, ou um mapa e um `ROADMAP.md` | você: invoca `feature` ou `tasks` quando a conversa amadurece |
+| Conversa | nenhuma, `grilling` ou `wayfinder` | nova | `Eu quero resolver ...`, `/grilling ...`, `/wayfinder ...` ou `/wayfinder <MAP>` para abrir a próxima feature de um roadmap | um problema, ou um mapa com feature `planned` | entendimento compartilhado, ou um mapa e um `ROADMAP.md`, ou a próxima feature `in-progress` com a conversa pronta para a `feature` | você: invoca `feature` ou `tasks` quando a conversa amadurece |
 | SPEC | `feature` | a mesma da conversa | `/feature` | a conversa | `docs/features/<feature>/SPEC.md` | automática: segue para `tasks` |
 | Tasks | `tasks` | nova (ou a mesma da conversa, se não houve SPEC) | `/tasks docs/features/<feature>/SPEC.md` ou `/tasks` | SPEC ou conversa | `docs/features/<feature>/tasks/*.md` ou `docs/tasks/<task>.md` | você: escolhe a próxima task da fila |
 | PR | `implement` | nova, a do **desenvolvedor** | `/implement docs/features/<feature>/tasks/01-first-task.md` ou `/implement docs/tasks/<task>.md` | um arquivo de task | um PR aberto | automática: todo PR aberto recebe uma review |
@@ -61,6 +62,6 @@ A fila é um conjunto de arquivos de task ainda não mergeados, e a regra de pri
 1. Tasks criadas pela `retro` ou pela `follow-ups` do ciclo que acabou de fechar. Elas corrigem o ambiente ou pagam uma dívida da feature, e passam pelo mesmo ciclo `implement` e `review` antes de qualquer outra coisa.
 2. A próxima task da feature em andamento, na ordem numerada em `tasks/`.
 3. Tasks avulsas em `docs/tasks/`.
-4. A próxima feature do `ROADMAP.md`, começando pelo estado Tasks.
+4. A próxima feature `planned` do `ROADMAP.md`, começando pelo estado Conversa: `/wayfinder <MAP>` abre a feature (carrega as decisões dos tickets e a SPEC anterior, marca `in-progress`, faz grilling) e entrega a conversa à `feature`, que escreve a SPEC; só então vem `tasks`.
 
 Uma task avulsa fecha o ciclo na `retro`. Uma feature fecha quando a `follow-ups` da última task não gera tasks novas, ou quando todas as que gerou foram mergeadas. Um roadmap fecha quando todas as suas features fecharam.
