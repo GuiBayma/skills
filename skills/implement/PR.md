@@ -39,7 +39,7 @@ Load the `show-me` skill and pick the form that shows what changed: a diff when 
 
 List the seams `tdd` chose, each with what it catches and what it misses, because the user saw none of them before the code was written and weighs them here, against the tests that cross them. Keep the line whenever a test carries the evidence, new or already present (an existing test that reproduces the problem, the suite that covers a refactor), and drop it only when no test does (documentation, configuration).
 
-Show before and after with evidence appropriate to the change:
+Show before and after for every category below that the change falls into, because a mixed change (configuration plus refactor) needs each part's evidence:
 
 - **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
 - **Configuration and CI wiring** (a build script, a workflow step, an ignore list): the **Before** is the command observed failing (a missing target, a red lint, a temporary probe made to fail and then reverted), and the **After** is the same command green.
