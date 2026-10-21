@@ -13,8 +13,12 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
 
 **Seams:** <each seam under test, with what it catches and what it misses>
 
-- **Before:** <the failing test run, screenshot, or prior state appropriate to the change>
-  **After:** <the same test passing, screenshot, or verified new state>
+<one slot per category the change falls into, from the list under Evidence below; drop the others>
+
+- **Before:** <the failing test run, the command observed failing, or a screenshot>
+  **After:** <the same test or command green, or the new screenshot>
+- **Refactor:** `<path of each test file covering the affected interface>`: <the test names>, green before and after
+- **Documentation:** before "<the problematic guidance, quoted>"; after "<its replacement, quoted>"; checked: <how links, examples, and consistency with related instructions were checked>
 
 ## Merge Danger
 
@@ -39,12 +43,12 @@ Load the `show-me` skill and pick the form that shows what changed: a diff when 
 
 List the seams `tdd` chose, each with what it catches and what it misses, because the user saw none of them before the code was written and weighs them here, against the tests that cross them. Keep the line whenever a test carries the evidence, new or already present (an existing test that reproduces the problem, the suite that covers a refactor), and drop it only when no test does (documentation, configuration).
 
-Show before and after for every category below that the change falls into, because a mixed change (configuration plus refactor) needs each part's evidence:
+Fill one slot for every category below that the change falls into, because a mixed change (configuration plus refactor) needs each part's evidence. A slot is done when every placeholder in it is replaced by a path, a name or a quote; a summary in its place leaves the slot empty:
 
 - **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
 - **Configuration and CI wiring** (a build script, a workflow step, an ignore list): the **Before** is the command observed failing (a missing target, a red lint, a temporary probe made to fail and then reverted), and the **After** is the same command green.
-- **Documentation changes:** quote the problematic guidance and its replacement, and record how links, examples, and consistency with related instructions were checked.
-- **Behaviour-preserving refactors:** cite the existing tests covering the affected interface by path and test name and show the relevant suite green before and after. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
+- **Documentation changes:** the Documentation slot, one per passage changed.
+- **Behaviour-preserving refactors:** the Refactor slot. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
 
 Keep the red output you saw at the time, because it cannot be reproduced once the code is green.
 
