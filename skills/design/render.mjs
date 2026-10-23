@@ -2,24 +2,53 @@
 // Renderiza cada artboard de um snapshot de design em png/<ID>.png, ou serve o
 // canvas para ver os artboards vivos (animações incluídas).
 //
-//   node render.mjs <design-dir> [ID…]    gera os PNGs de todos os IDs, ou só dos dados
-//   node render.mjs --serve <design-dir>  serve e imprime a URL de cada artboard
+//   node render.mjs <design-dir> [ID…]      gera os PNGs de todos os IDs, ou só dos dados
+//   node render.mjs --serve <design-dir>    serve e imprime a URL de cada artboard
+//   node render.mjs --missing <design-dir>  lista os assets ainda por baixar
 //
-// Um artboard com erro de script ou recurso que não carregou não tem o PNG salvo,
-// e o comando sai com erro, porque um gabarito incompleto passaria por aprovado.
+// Um artboard com erro de script ou recurso que não carregou fica sem PNG (o
+// anterior é apagado), e o comando sai com erro, porque um gabarito incompleto ou
+// antigo passaria por aprovado.
 //
 // O Playwright vem do projeto em que o comando roda, porque a skill não instala
 // dependências.
 import { createServer } from 'node:http';
-import { mkdir, readdir, readFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { extname, join, resolve, sep } from 'node:path';
 
 const args = process.argv.slice(2);
-const serveOnly = args[0] === '--serve';
-const [designArg, ...onlyIds] = serveOnly ? args.slice(1) : args;
+const mode = ['--serve', '--missing'].includes(args[0]) ? args[0] : 'render';
+const [designArg, ...onlyIds] = mode === 'render' ? args : args.slice(1);
 const designDir = resolve(designArg ?? '');
 const canvasDir = join(designDir, 'canvas');
+
+// Os assets que os artboards e as folhas de estilo já baixadas referenciam e que
+// ainda faltam em assets/, mais as referências que não são /_blob/<id>, que nem o
+// canvas nem o snapshot conseguem resolver. Rodado até sair vazio, cobre as
+// dependências transitivas (uma folha que aponta uma fonte).
+if (mode === '--missing') {
+  const assetsDir = join(canvasDir, 'assets');
+  const present = await readdir(assetsDir).catch(() => []);
+  const referenced = new Set();
+  const unresolvable = [];
+  for (const file of (await readdir(canvasDir)).filter((name) => name.endsWith('.dc.html'))) {
+    for (const [, id] of (await readFile(join(canvasDir, file), 'utf8')).matchAll(/\/_blob\/([0-9a-f]{32})/g)) referenced.add(id);
+  }
+  for (const file of present.filter((name) => name.endsWith('.css'))) {
+    const sheet = await readFile(join(assetsDir, file), 'utf8');
+    const urls = [...sheet.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)|@import\s+['"]([^'"]+)['"]/g)].map((match) => match[1] ?? match[2]);
+    for (const url of urls) {
+      const blob = url.match(/^\/_blob\/([0-9a-f]{32})$/);
+      if (blob) referenced.add(blob[1]);
+      else if (!/^(data:|https?:|#)/.test(url)) unresolvable.push(`${file}: ${url}`);
+    }
+  }
+  const missing = [...referenced].filter((id) => !present.some((name) => name.startsWith(`${id}.`)));
+  const lines = [...missing, ...unresolvable];
+  if (lines.length > 0) console.log(lines.join('\n'));
+  process.exit(lines.length > 0 ? 1 : 0);
+}
 const types = {
   '.html': 'text/html',
   '.js': 'text/javascript',
@@ -71,7 +100,7 @@ if (unknownIds.length > 0) {
 }
 const boards = onlyIds.length > 0 ? allBoards.filter((board) => onlyIds.includes(board.id)) : allBoards;
 
-if (serveOnly) {
+if (mode === '--serve') {
   for (const board of boards) console.log(`${board.id}\t${origin}/${board.file}`);
   console.log('Ctrl+C para parar.');
 } else {
@@ -106,10 +135,11 @@ if (serveOnly) {
     await page.goto(`${origin}/${board.file}`, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
+    const path = join(designDir, 'png', `${board.id}.png`);
     if (problems.length > 0) {
       failures.push(...problems.map((problem) => `${board.id}: ${problem}`));
+      await rm(path, { force: true });
     } else {
-      const path = join(designDir, 'png', `${board.id}.png`);
       await page.screenshot({ path, fullPage: board.expand === 'fill' });
       console.log(path);
     }

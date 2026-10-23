@@ -10,7 +10,7 @@ Turn the UI of one **spec** (the file passed with the invocation, `/design docs/
 
 Standing instructions for the whole session:
 
-- **Code is the source of truth.** The golden is a contract for building, valid until the feature's last task merges; after that the app is the truth and the snapshot is history. Identity files (tokens, fonts) go onto the canvas byte for byte from the project, never retyped. A Design System artifact the project names is derived from its code, and the code wins any divergence.
+- **Code is the source of truth.** The golden is a contract for building, valid until the feature's last task merges; after that the app is the truth and the snapshot is history. Identity files (tokens, fonts) go onto the canvas byte for byte from the project, never retyped; the one change allowed is in a stylesheet that references other files (a font sheet), whose references become the `/_blob/` URLs of those files, uploaded first, because a relative path resolves on neither the canvas nor the snapshot. A Design System artifact the project names is derived from its code, and the code wins any divergence.
 - **The design decides the look and which states a screen shows; the spec decides behaviour.** A behaviour change raised in a comment (a new limit, a new rule) goes back to the spec at approval; a visual one lives only in the design.
 - **Borrow solutions, never looks.** A reference app supplies the pattern (how a flow is laid out, what a state shows, where motion helps); the project's identity supplies the face.
 - **The project supplies the specifics.** Read its `AGENTS.md` (or `CLAUDE.md`) for the pointers this skill needs: identity (tokens, fonts, visual rules), breakpoints, the reference source, how to run the app and reach a state, and the principle skills (visual, motion). A missing pointer: ask the user once and propose the line for `AGENTS.md`, because the next run needs it too.
@@ -25,7 +25,7 @@ Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<brea
 
 1. **Load the spec and the base.** Read the spec in full and its `## Design` section:
    - `Pending`: a new design, the whole process below.
-   - A golden, and the user named IDs with the invocation (`/design <spec> <ID>…`): a **reopening**, usually because `implement` found an artboard it cannot build. Work on the same canvas, only those IDs and the states they drag in, through steps 6 to 9; the export replaces only their files, and the spec changes only where those IDs changed it.
+   - A golden, and the user named IDs with the invocation (`/design <spec> <ID>…`): a **reopening**, usually because `implement` found an artboard it cannot build. First delete the reopened IDs' `png/<ID>.png`, because an ID without its PNG is pending for `tasks` and `implement` until the export renders it again, and the old image would pass for the new design. Then work on the same canvas, only those IDs and the states they drag in, through steps 6 to 9; the export replaces only their files, and the spec changes only where those IDs changed it.
    - Anything else (`No UI`, `Waived`, a golden with no IDs named): stop, with the user told what it says.
 
    Read the project pointers above. List the screens the spec touches, and for each one fix its **base**:

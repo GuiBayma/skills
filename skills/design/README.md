@@ -2,7 +2,7 @@
 
 Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill): o design aprovado contra o qual as tasks da feature são construídas e conferidas. As telas são desenhadas num canvas do tipo Design dos Artifacts do Claude, refinadas com você em rodadas de comentários e exportadas para `docs/features/<feature-name>/design/`.
 
-**Invocação:** manual (`/design docs/features/<feature-name>/SPEC.md`), em uma sessão nova do Claude Code, entre a `feature` e a `tasks`, quando a spec tem UI. Com IDs depois da spec (`/design <spec> <ID>…`), reabre só esses artboards, em geral porque a `implement` encontrou um que não dá para construir como foi desenhado. Não roda no Codex, porque depende da ferramenta Artifact. O gabarito exportado, por outro lado, é lido por qualquer agente.
+**Invocação:** manual (`/design docs/features/<feature-name>/SPEC.md`), em uma sessão nova do Claude Code, entre a `feature` e a `tasks`, quando a spec tem UI. Com IDs depois da spec (`/design <spec> <ID>…`), apaga os PNGs desses IDs (que ficam pendentes para `tasks` e `implement`) e reabre só esses artboards, em geral porque a `implement` encontrou um que não dá para construir como foi desenhado. Não roda no Codex, porque depende da ferramenta Artifact. O gabarito exportado, por outro lado, é lido por qualquer agente.
 
 ## Princípios
 
@@ -29,7 +29,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 - `STATES.md`: o inventário de valores, o catálogo de estados e os sinais de falha usados na autocrítica.
 - `MOTION.md`: os filtros de animação, o formato da ficha de movimento e como o código é conferido contra ela (lido também por `implement` e `review`).
 - `SNAPSHOT.md`: o formato do gabarito em disco, seu ciclo de vida, o export e a comparação com o app (lido também por `tasks`, `implement` e `review`).
-- `render.mjs`: renderiza um PNG por ID (todos ou só os IDs dados), ou serve o canvas para ver as animações, usando o Playwright do projeto. Recusa um artboard com erro de script ou recurso que não carregou, sem salvar o PNG dele.
+- `render.mjs`: renderiza um PNG por ID (todos ou só os IDs dados), serve o canvas para ver as animações, ou lista os assets que faltam baixar (`--missing`, inclusive os que uma folha de estilo referencia), usando o Playwright do projeto. Um artboard com erro de script ou recurso que não carregou fica sem PNG, e o anterior é apagado.
 - `render.test.mjs`: testes do `render.mjs`; rode `node --test <dir-da-skill>/render.test.mjs` de um projeto que tenha o Playwright.
 
 ## Créditos

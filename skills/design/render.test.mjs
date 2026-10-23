@@ -61,6 +61,35 @@ test('refuses an ID the canvas does not have', async () => {
   assert.match(result.stderr, /tela--x@mobile/);
 });
 
+test('removes the stale PNG of an artboard that fails', async () => {
+  const designDir = await snapshot({
+    'a.dc.html': { id: 'tela--a@mobile', head: '<link rel="stylesheet" href="/_blob/0123456789abcdef0123456789abcdef">' },
+  });
+  await writeFile(join(designDir, 'png', 'tela--a@mobile.png'), 'gabarito anterior');
+
+  const result = await render(designDir, 'tela--a@mobile');
+
+  assert.notEqual(result.code, 0);
+  await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
+});
+
+test('lists the assets still missing, following the ones already exported', async () => {
+  const font = 'fedcba9876543210fedcba9876543210';
+  const sheet = '0123456789abcdef0123456789abcdef';
+  const designDir = await snapshot({
+    'a.dc.html': { id: 'tela--a@mobile', head: `<link rel="stylesheet" href="/_blob/${sheet}">` },
+  });
+  await writeFile(
+    join(designDir, 'canvas', 'assets', `${sheet}.css`),
+    `@font-face { font-family: F; src: url("/_blob/${font}") format("woff2"); }\n@import "outra.css";`,
+  );
+
+  const result = await render('--missing', designDir);
+
+  assert.equal(result.code, 1);
+  assert.deepEqual(result.stdout.trim().split('\n').sort(), [font, `${sheet}.css: outra.css`].sort());
+});
+
 test('fails without saving the PNG when an asset is missing', async () => {
   const designDir = await snapshot({
     'a.dc.html': { id: 'tela--a@mobile', head: '<link rel="stylesheet" href="/_blob/0123456789abcdef0123456789abcdef">' },
