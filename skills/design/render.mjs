@@ -137,7 +137,12 @@ if (mode === '--serve') {
     });
     try {
       await page.goto(`${origin}/${board.file}`, { waitUntil: 'networkidle' });
-      await page.evaluate(() => document.fonts.ready);
+      // Uma fonte servida com HTTP 200 que não decodifica só aparece no status da face.
+      const brokenFonts = await page.evaluate(async () => {
+        await document.fonts.ready;
+        return [...document.fonts].filter((face) => face.status === 'error').map((face) => `fonte ${face.family} não carregou`);
+      });
+      problems.push(...brokenFonts);
       await page.waitForTimeout(300);
       if (problems.length === 0) {
         await page.screenshot({ path, fullPage: board.expand === 'fill' });

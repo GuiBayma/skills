@@ -10,7 +10,8 @@ docs/features/<feature-name>/design/
 │   ├── support.js         # the Design runtime the artboards load
 │   └── assets/<id>.<ext>  # every uploaded asset, by its id
 ├── png/<ID>.png           # one image per ID, rendered from canvas/
-└── motion.md              # the motion sheet (MOTION.md)
+├── motion.md              # the motion sheet (MOTION.md)
+└── divergences.md         # region divergences accepted during implementation, when any
 ```
 
 ## Lifecycle
@@ -19,8 +20,10 @@ The snapshot is valid from approval until the feature's last task merges. After 
 
 Two changes reach it in between, both decided by the user when `implement` finds an artboard it cannot build as drawn:
 
-- **A small divergence accepted**: `implement` replaces `png/<ID>.png` with the app's screenshot of that ID and records the reason in its PR, so later tasks compare against what was built.
-- **A design divergence**: `/design <spec> <ID>…` deletes those IDs' PNGs, so they read as pending, reopens them on the canvas, and re-exports only their files: their artboards and assets, and their PNGs rendered by ID, so a PNG an earlier divergence replaced stays as it is.
+- **A small divergence accepted**, recorded by `implement` with the reason in its PR, so later tasks compare against what was built:
+  - in a task whose scope for the ID is `full`, the app's screenshot replaces `png/<ID>.png`, because the whole screen is built;
+  - in a task whose scope is a region, `png/<ID>.png` stays, because the rest of the screen is still to be built from it. The divergence goes into `divergences.md` (ID, region, reason, PR) with the app's screenshot at `divergences/<ID>--<region>.png`, and every later comparison of that ID judges that region against the recorded screenshot and the rest against the golden.
+- **A design divergence**: `/design <spec> <ID>…` deletes those IDs' PNGs and their entries in `divergences.md`, so they read as pending, reopens them on the canvas, and re-exports only their files: their artboards and assets, and their PNGs rendered by ID, so a PNG an earlier divergence replaced stays as it is.
 
 ## Exporting
 
@@ -45,4 +48,4 @@ An artboard with a script error or a resource that did not load (an asset missin
 
 ## Comparing the app with the golden
 
-An ID's browser test brings the app to that state at that breakpoint and saves a screenshot. Put it beside `png/<ID>.png` and compare as a designer would: layout, hierarchy, spacing, colour, type, the content each region shows. The golden is intent, never pixels: its components are hand-made HTML, so a difference of rendering (anti-aliasing, a pixel of padding the real component carries) is no finding, and a difference a user would notice is.
+An ID's browser test brings the app to that state at that breakpoint and saves a screenshot. Put it beside `png/<ID>.png`, with any region of that ID in `divergences.md` judged against its recorded screenshot instead, and compare as a designer would: layout, hierarchy, spacing, colour, type, the content each region shows. The golden is intent, never pixels: its components are hand-made HTML, so a difference of rendering (anti-aliasing, a pixel of padding the real component carries) is no finding, and a difference a user would notice is.

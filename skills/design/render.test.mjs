@@ -86,6 +86,23 @@ test('removes the stale PNG of an artboard that never settles', async () => {
   await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
 });
 
+test('fails without saving the PNG when a font does not decode', async () => {
+  const font = 'fedcba9876543210fedcba9876543210';
+  const designDir = await snapshot({
+    'a.dc.html': {
+      id: 'tela--a@mobile',
+      head: `<style>@font-face { font-family: Quebrada; src: url("/_blob/${font}") format("woff2"); } p { font-family: Quebrada, serif; }</style>`,
+    },
+  });
+  await writeFile(join(designDir, 'canvas', 'assets', `${font}.woff2`), 'isto não é uma fonte');
+
+  const result = await render(designDir);
+
+  assert.notEqual(result.code, 0);
+  assert.match(result.stderr, /Quebrada/);
+  await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
+});
+
 test('lists the assets still missing, following the ones already exported', async () => {
   const font = 'fedcba9876543210fedcba9876543210';
   const sheet = '0123456789abcdef0123456789abcdef';
