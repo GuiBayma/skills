@@ -14,7 +14,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 ## O que faz
 
 1. **Carrega a spec e a base.** Para uma tela que já existe, a base são screenshots do app de hoje. Para uma tela que outra feature ainda está construindo, a base é o snapshot dela. Uma tela nova não tem base.
-2. **Monta a matriz** (`STATES.md`): primeiro o inventário dos valores que cada tela exibe, depois os estados que eles forçam, cruzados com os breakpoints. Cada célula vira um **ID** estável, `<tela>--<estado>@<breakpoint>`.
+2. **Monta a matriz** (`STATES.md`): primeiro o inventário dos valores que cada tela exibe, depois os estados que eles forçam, cruzados com os breakpoints. Cada célula vira um **ID** estável, `<tela>--<estado>@<breakpoint>`. Um estado que muda só um detalhe vira um artboard parcial, que declara sua base (o ID da tela inteira) e a região que mostra; o export registra o par em `partials.md`, e a comparação junta a região do parcial com o resto da base.
 3. **Pesquisa referências** com sub-agentes em paralelo, um por fluxo, que devolvem texto e links, nunca imagens.
 4. **Decide o movimento** (`MOTION.md`). Cada transição de estado passa por quatro filtros (frequência, propósito, função e orçamento) e vira uma linha da ficha de movimento, inclusive as que foram rejeitadas.
 5. **Monta o canvas**: uma linha por tela, com a base, os estados e um post-it de referências. Onde a direção está aberta, as variantes ficam lado a lado.

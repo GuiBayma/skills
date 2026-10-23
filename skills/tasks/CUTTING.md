@@ -20,7 +20,7 @@ The task file is the whole context of the session that works it, so the **Contex
 
 When the spec names a **golden** (its `## Design` section, written by the `design` skill), every ID it lists is checked by every task that changes what that state shows, each on its **Design** line with its scope:
 
-- `(full)`: the whole artboard. Exactly one task per ID carries it, the last one to change that state, and it is blocked by every other task that lists the ID, because only then can the whole screen match.
+- `(full)`: the whole artboard (for a partial ID, its region plus the rest of its base, as `SNAPSHOT.md` compares it). Exactly one task per ID carries it, the last one to change that state, and it is blocked by every other task that lists the ID, because only then can the whole screen match.
 - `(region: <what>)`: only the part this task delivers (the filter bar, the empty-state message), which must match its part of `png/<ID>.png`, while the rest of the screen may still differ.
 
 An ID mapped to one story and touched by one task is simply `(full)` on that task. Each listed ID adds a Verification item (the app at that state and breakpoint matches `png/<ID>.png` in the task's scope, compared as [SNAPSHOT.md](../design/SNAPSHOT.md) says), and the task's motion rows add one more, so a task that changes a screen is never done by tests alone and never escapes the comparison by sharing a screen.

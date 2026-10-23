@@ -19,7 +19,7 @@ Standing instructions for the whole session:
 
 ## IDs
 
-Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<breakpoint>`, kebab-case, in the spec's glossary vocabulary (`upload--erro-arquivo-grande@mobile`). The ID is the handle the spec, the tasks, the tests and the PNGs share, so it never changes once approved. A breakpoint whose layout differs (a menu that becomes a drawer) is its own ID, never the same artboard resized. A state that differs from its screen's base in one detail gets a **partial** artboard showing only the region that changes, still with its full ID.
+Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<breakpoint>`, kebab-case, in the spec's glossary vocabulary (`upload--erro-arquivo-grande@mobile`). The ID is the handle the spec, the tasks, the tests and the PNGs share, so it never changes once approved. A breakpoint whose layout differs (a menu that becomes a drawer) is its own ID, never the same artboard resized. A state that differs from another of its screen's states in one detail gets a **partial** artboard showing only the region that changes, still with its full ID, and declares its **base** (the ID of the whole screen it derives from, at the same breakpoint, itself never partial) and its **region** (what the partial shows, named as the user would: the photo field, the error banner). The pair goes into `partials.md` at export, because a partial PNG is only comparable against the app beside its base.
 
 ## Process
 

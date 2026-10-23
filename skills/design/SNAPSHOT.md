@@ -11,6 +11,7 @@ docs/features/<feature-name>/design/
 │   └── assets/<id>.<ext>  # every uploaded asset, by its id
 ├── png/<ID>.png           # one image per ID, rendered from canvas/
 ├── motion.md              # the motion sheet (MOTION.md)
+├── partials.md            # each partial ID with its base ID and region, when any
 └── divergences.md         # region divergences accepted during implementation, when any
 ```
 
@@ -32,7 +33,7 @@ With the Artifact tool, on the approved canvas:
 1. Read `project/canvas.json` and every `project/*.dc.html` it lists (`read` with `paths`), plus `artifact-type/dc-runtime.js`. Save them under `canvas/`, the runtime as `support.js`.
 2. Download the assets: run `node <skill-dir>/render.mjs --missing <design-dir>`, read each id it lists one by one (`read` with `path` set to the id: an id in `paths` is refused) into `canvas/assets/`, and run it again until it prints nothing. The tool names each file `<id>.<ext>`, which is what the renderer serves, and each round follows the stylesheets just downloaded to the files they reference (a font). A line `<file>: <url>` is a reference that is no `/_blob/` URL: fix that stylesheet on the canvas (SKILL.md, Code is the source of truth) and export again.
 3. Render the PNGs, then check: one `png/<ID>.png` per board in `canvas.json`. A reopening renders only its IDs.
-4. Write `motion.md` from the sheet built in the rounds.
+4. Write `motion.md` from the sheet built in the rounds, and `partials.md` as a table `| ID | Base | Region |`, one row per partial artboard. Every base must be an ID with its own full PNG, so the export is incomplete until it is.
 
 ## Rendering and viewing
 
@@ -48,4 +49,4 @@ An artboard with a script error or a resource that did not load (an asset missin
 
 ## Comparing the app with the golden
 
-An ID's browser test brings the app to that state at that breakpoint and saves a screenshot. Put it beside `png/<ID>.png`, with any region of that ID in `divergences.md` judged against its recorded screenshot instead, and compare as a designer would: layout, hierarchy, spacing, colour, type, the content each region shows. The golden is intent, never pixels: its components are hand-made HTML, so a difference of rendering (anti-aliasing, a pixel of padding the real component carries) is no finding, and a difference a user would notice is.
+An ID's browser test brings the app to that state at that breakpoint and saves a screenshot of the whole screen. Put it beside `png/<ID>.png`, with any region of that ID in `divergences.md` judged against its recorded screenshot instead. A partial ID (a row in `partials.md`) is compared in two parts: its region against `png/<ID>.png`, and the rest of the screen against `png/<base>.png` (with the base's own divergences); its `full` scope means both parts. Then compare as a designer would: layout, hierarchy, spacing, colour, type, the content each region shows. The golden is intent, never pixels: its components are hand-made HTML, so a difference of rendering (anti-aliasing, a pixel of padding the real component carries) is no finding, and a difference a user would notice is.
