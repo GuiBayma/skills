@@ -2,6 +2,7 @@
 //   node --test <skill-dir>/render.test.mjs
 import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
+import { createServer } from 'node:http';
 import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -129,6 +130,23 @@ test('saves the PNG when every image decodes', async () => {
   await writeFile(join(designDir, 'canvas', 'assets', `${image}.png`), Buffer.from(onePixel, 'base64'));
 
   const result = await render(designDir);
+
+  assert.equal(result.code, 0, result.stderr);
+  assert.notEqual((await readFile(join(designDir, 'png', 'tela--a@mobile.png'))).length, 0);
+});
+
+test('saves the PNG when an image from another origin decodes', async () => {
+  const onePixel = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  const other = createServer((request, response) => {
+    response.writeHead(200, { 'content-type': 'image/png' });
+    response.end(Buffer.from(onePixel, 'base64'));
+  });
+  await new Promise((done) => other.listen(0, '127.0.0.1', done));
+  const url = `http://127.0.0.1:${other.address().port}/peca.png`;
+  const designDir = await snapshot({ 'a.dc.html': { id: 'tela--a@mobile', head: `<style>p { background-image: url("${url}"); }</style>` } });
+
+  const result = await render(designDir);
+  other.close();
 
   assert.equal(result.code, 0, result.stderr);
   assert.notEqual((await readFile(join(designDir, 'png', 'tela--a@mobile.png'))).length, 0);

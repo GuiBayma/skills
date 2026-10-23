@@ -130,9 +130,12 @@ if (mode === '--serve') {
     const problems = [];
     page.on('pageerror', (error) => problems.push(error.message));
     page.on('requestfailed', (request) => problems.push(`${request.url()}: ${request.failure()?.errorText}`));
+    const imageUrls = new Set();
     page.on('response', (response) => {
       if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) {
         problems.push(`${response.url()}: HTTP ${response.status()}`);
+      } else if ((response.headers()['content-type'] ?? '').startsWith('image/')) {
+        imageUrls.add(response.url());
       }
     });
     try {
@@ -144,19 +147,11 @@ if (mode === '--serve') {
       });
       problems.push(...brokenFonts);
       // Uma imagem servida com HTTP 200 que não decodifica também passa sem erro de
-      // rede: decodifica de novo cada imagem que a página carregou, de <img> ou de CSS.
-      const brokenImages = await page.evaluate(async () => {
-        const urls = performance
-          .getEntriesByType('resource')
-          .filter((entry) => ['img', 'css', 'other'].includes(entry.initiatorType))
-          .map((entry) => entry.name);
-        const images = [];
-        for (const url of new Set(urls)) {
-          const type = (await fetch(url)).headers.get('content-type') ?? '';
-          if (type.startsWith('image/')) images.push(url);
-        }
+      // rede: decodifica de novo cada imagem que a página recebeu, de <img> ou de CSS.
+      // Sem crossOrigin, a decodificação não exige CORS, como a própria exibição.
+      const brokenImages = await page.evaluate(async (urls) => {
         const broken = await Promise.all(
-          images.map(async (url) => {
+          urls.map(async (url) => {
             const image = new Image();
             image.src = url;
             return image.decode().then(
@@ -166,7 +161,7 @@ if (mode === '--serve') {
           }),
         );
         return broken.filter(Boolean);
-      });
+      }, [...imageUrls]);
       problems.push(...brokenImages);
       await page.waitForTimeout(300);
       if (problems.length === 0) {
