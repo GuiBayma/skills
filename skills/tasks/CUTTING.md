@@ -18,7 +18,12 @@ Write what the task delivers from the user's perspective, never a layer-by-layer
 
 The task file is the whole context of the session that works it, so the **Context** section carries every decision from the brief that the task depends on; a feature task names its spec in the **Spec** line and carries in Context only what the spec leaves implicit.
 
-When the spec names a **golden** (its `## Design` section, written by the `design` skill), every ID it lists belongs to exactly one task: the task that carries the user story the ID is mapped to, or, when several tasks share a screen, the one that first makes that state reachable. The task names its IDs on its **Design** line, and its Verification gains one item per ID (the app at that state and breakpoint matches `png/<ID>.png`, compared as [SNAPSHOT.md](../design/SNAPSHOT.md) says) and one for its motion rows, so a task with UI is never done by tests alone.
+When the spec names a **golden** (its `## Design` section, written by the `design` skill), every ID it lists is checked by every task that changes what that state shows, each on its **Design** line with its scope:
+
+- `(full)`: the whole artboard. Exactly one task per ID carries it, the last one to change that state, and it is blocked by every other task that lists the ID, because only then can the whole screen match.
+- `(region: <what>)`: only the part this task delivers (the filter bar, the empty-state message), which must match its part of `png/<ID>.png`, while the rest of the screen may still differ.
+
+An ID mapped to one story and touched by one task is simply `(full)` on that task. Each listed ID adds a Verification item (the app at that state and breakpoint matches `png/<ID>.png` in the task's scope, compared as [SNAPSHOT.md](../design/SNAPSHOT.md) says), and the task's motion rows add one more, so a task that changes a screen is never done by tests alone and never escapes the comparison by sharing a screen.
 
 A task is worked in a fresh session pointed at its file; that session sets Status to `in-progress` when it starts, records the PR it opens on a **PR** line after the Status line, and sets Status to `done` when every verification item holds.
 
@@ -33,7 +38,7 @@ A task is worked in a fresh session pointed at its file; that session sets Statu
 
 **Spec:** `docs/features/<feature-name>/SPEC.md`
 
-**Design:** the IDs from the spec's golden this task makes real (`<screen>--<state>@<breakpoint>`, …), or "None"
+**Design:** the IDs from the spec's golden this task changes, each with its scope (`<screen>--<state>@<breakpoint>` (full), `<screen>--<state>@<breakpoint>` (region: <what>), …), or "None"
 
 **Status:** ready
 

@@ -61,4 +61,4 @@ Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<brea
    - `<ID>`, `<ID>`: user story <n>
    ```
 
-   Every ID appears on some line, each line naming the requirement its artboards make visible, because `tasks` gives each task the IDs of the stories it carries.
+   Every ID appears on some line, each line naming the requirement its artboards make visible, because `tasks` gives each task the IDs of the stories it carries, and every task that changes a state checks its ID.

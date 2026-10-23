@@ -19,7 +19,7 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
   **After:** <the same test or command green, or the new screenshot>
 - **Refactor:** `<path of each test file covering the affected interface>`: <the test names>, green before and after
 - **Documentation:** before "<the problematic guidance, quoted>"; after "<its replacement, quoted>"; checked: <how links, examples, and consistency with related instructions were checked>
-- **Design:** one line per ID on the task's Design line: `<ID>`: `<test that reaches it>`, golden `png/<ID>.png`, app screenshot `<where it is published>`, <matches, or the accepted divergence and why>; motion: <each row checked, and how>
+- **Design:** one line per ID on the task's Design line: `<ID>` (<its scope>): `<test that reaches it>`, golden `png/<ID>.png`, app screenshot `<where it is published>`, <matches, or the accepted divergence and why>; motion: <each row checked, and how>
 
 ## Merge Danger
 
