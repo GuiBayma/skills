@@ -143,6 +143,31 @@ if (mode === '--serve') {
         return [...document.fonts].filter((face) => face.status === 'error').map((face) => `fonte ${face.family} não carregou`);
       });
       problems.push(...brokenFonts);
+      // Uma imagem servida com HTTP 200 que não decodifica também passa sem erro de
+      // rede: decodifica de novo cada imagem que a página carregou, de <img> ou de CSS.
+      const brokenImages = await page.evaluate(async () => {
+        const urls = performance
+          .getEntriesByType('resource')
+          .filter((entry) => ['img', 'css', 'other'].includes(entry.initiatorType))
+          .map((entry) => entry.name);
+        const images = [];
+        for (const url of new Set(urls)) {
+          const type = (await fetch(url)).headers.get('content-type') ?? '';
+          if (type.startsWith('image/')) images.push(url);
+        }
+        const broken = await Promise.all(
+          images.map(async (url) => {
+            const image = new Image();
+            image.src = url;
+            return image.decode().then(
+              () => undefined,
+              () => `imagem ${url} não decodificou`,
+            );
+          }),
+        );
+        return broken.filter(Boolean);
+      });
+      problems.push(...brokenImages);
       await page.waitForTimeout(300);
       if (problems.length === 0) {
         await page.screenshot({ path, fullPage: board.expand === 'fill' });

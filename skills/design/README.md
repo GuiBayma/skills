@@ -29,7 +29,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 - `STATES.md`: o inventário de valores, o catálogo de estados e os sinais de falha usados na autocrítica.
 - `MOTION.md`: os filtros de animação, o formato da ficha de movimento e como o código é conferido contra ela (lido também por `implement` e `review`).
 - `SNAPSHOT.md`: o formato do gabarito em disco, seu ciclo de vida, o export e a comparação com o app (lido também por `tasks`, `implement` e `review`).
-- `render.mjs`: renderiza um PNG por ID (todos ou só os IDs dados), serve o canvas para ver as animações, ou lista os assets que faltam baixar (`--missing`, inclusive os que uma folha de estilo referencia), usando o Playwright do projeto. Um artboard com erro de script ou recurso que não carregou fica sem PNG, e o anterior é apagado.
+- `render.mjs`: renderiza um PNG por ID (todos ou só os IDs dados), serve o canvas para ver as animações, ou lista os assets que faltam baixar (`--missing`, inclusive os que uma folha de estilo referencia), usando o Playwright do projeto. Um artboard com erro de script, recurso que não carregou, ou fonte ou imagem que não decodifica fica sem PNG, e o anterior é apagado.
 - `render.test.mjs`: testes do `render.mjs`; rode `node --test <dir-da-skill>/render.test.mjs` de um projeto que tenha o Playwright.
 
 ## Créditos

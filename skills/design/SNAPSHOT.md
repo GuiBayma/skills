@@ -44,7 +44,7 @@ node <skill-dir>/render.mjs docs/features/<feature-name>/design <ID>…    # onl
 node <skill-dir>/render.mjs --serve docs/features/<feature-name>/design  # a URL per ID, to watch motion live
 ```
 
-An artboard with a script error or a resource that did not load (an asset missing from `assets/`, a font that failed) gets no PNG, its old one deleted, and the script names it and exits with an error, because an incomplete golden would pass for an approved one: fix the export and render again. A project without Playwright: the script says so and exits; ask the user to install it. A golden without its PNGs is no golden: the spec stays `Pending` until every ID has one.
+An artboard with a script error or a resource that did not load (an asset missing from `assets/`, a font or image that does not decode) gets no PNG, its old one deleted, and the script names it and exits with an error, because an incomplete golden would pass for an approved one: fix the export and render again. A project without Playwright: the script says so and exits; ask the user to install it. A golden without its PNGs is no golden: the spec stays `Pending` until every ID has one.
 
 ## Comparing the app with the golden
 

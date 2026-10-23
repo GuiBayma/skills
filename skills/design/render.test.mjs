@@ -103,6 +103,37 @@ test('fails without saving the PNG when a font does not decode', async () => {
   await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
 });
 
+for (const [usage, head] of [
+  ['an img', (url) => `</head><body><img src="${url}" alt="peça"><head>`],
+  ['a CSS background', (url) => `<style>p { background-image: url("${url}"); }</style>`],
+]) {
+  test(`fails without saving the PNG when ${usage} does not decode`, async () => {
+    const image = 'abcdefabcdefabcdefabcdefabcdefab';
+    const designDir = await snapshot({ 'a.dc.html': { id: 'tela--a@mobile', head: head(`/_blob/${image}`) } });
+    await writeFile(join(designDir, 'canvas', 'assets', `${image}.png`), 'isto não é uma imagem');
+
+    const result = await render(designDir);
+
+    assert.notEqual(result.code, 0);
+    assert.match(result.stderr, new RegExp(image));
+    await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
+  });
+}
+
+test('saves the PNG when every image decodes', async () => {
+  const image = 'abcdefabcdefabcdefabcdefabcdefab';
+  const designDir = await snapshot({
+    'a.dc.html': { id: 'tela--a@mobile', head: `<style>p { background-image: url("/_blob/${image}"); }</style>` },
+  });
+  const onePixel = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+  await writeFile(join(designDir, 'canvas', 'assets', `${image}.png`), Buffer.from(onePixel, 'base64'));
+
+  const result = await render(designDir);
+
+  assert.equal(result.code, 0, result.stderr);
+  assert.notEqual((await readFile(join(designDir, 'png', 'tela--a@mobile.png'))).length, 0);
+});
+
 test('lists the assets still missing, following the ones already exported', async () => {
   const font = 'fedcba9876543210fedcba9876543210';
   const sheet = '0123456789abcdef0123456789abcdef';
