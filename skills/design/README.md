@@ -9,7 +9,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 - **O código é a fonte da verdade.** O gabarito é um contrato que vale até o merge da última task da feature. Depois disso, a verdade é o app. Tokens e fontes entram no canvas byte a byte, vindos do projeto.
 - **O design decide a aparência e quais estados a tela mostra; a spec decide o comportamento.** Uma mudança de comportamento que surgir nos comentários volta para a spec na aprovação.
 - **Copiar soluções, não a cara.** Os apps de referência dão o padrão, e a identidade do projeto dá a cara.
-- **A skill é genérica; o projeto especializa.** O `AGENTS.md` do projeto indica a identidade visual, os breakpoints, a fonte de referências (no meu caso, o Mobbin), como subir o app e as skills de princípios visuais e de movimento.
+- **A skill é genérica; o projeto especializa.** O `AGENTS.md` do projeto aponta um documento com a identidade visual, os breakpoints, a fonte de referências (no meu caso, o Mobbin), as skills de princípios visuais e de movimento, e como subir o app e levá-lo a um estado. O `PROJECT.md` da skill é o modelo desse documento.
 
 ## O que faz
 
@@ -26,6 +26,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 ## Arquivos
 
 - `SKILL.md`: o processo.
+- `PROJECT.md`: o que o projeto fornece, e o modelo do documento que guarda isso (identidade, breakpoints, referências, princípios, base e estados).
 - `STATES.md`: o inventário de valores, o catálogo de estados e os sinais de falha usados na autocrítica.
 - `MOTION.md`: os filtros de animação, o formato da ficha de movimento e como o código é conferido contra ela (lido também por `implement` e `review`).
 - `SNAPSHOT.md`: o formato do gabarito em disco, seu ciclo de vida, o export e a comparação com o app (lido também por `tasks`, `implement` e `review`).
