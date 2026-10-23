@@ -28,7 +28,7 @@ With the Artifact tool, on the approved canvas:
 
 1. Read `project/canvas.json` and every `project/*.dc.html` it lists (`read` with `paths`), plus `artifact-type/dc-runtime.js`. Save them under `canvas/`, the runtime as `support.js`.
 2. Read each asset the artboards reference (every `/_blob/<id>` in them) one by one (`read` with `path` set to the id: an id in `paths` is refused), into `canvas/assets/`; the tool names each file `<id>.<ext>`, which is what the renderer serves.
-3. Render the PNGs, then check the count: one `png/<ID>.png` per board in `canvas.json`. A reopening renders only its IDs.
+3. Render the PNGs, then check: one `png/<ID>.png` per board in `canvas.json`. A reopening renders only its IDs.
 4. Write `motion.md` from the sheet built in the rounds.
 
 ## Rendering and viewing
@@ -41,7 +41,7 @@ node <skill-dir>/render.mjs docs/features/<feature-name>/design <ID>…    # onl
 node <skill-dir>/render.mjs --serve docs/features/<feature-name>/design  # a URL per ID, to watch motion live
 ```
 
-An artboard with a script error or a resource that did not load (an asset missing from `assets/`, a font that failed) gets no PNG, and the script names it and exits with an error, because an incomplete golden would pass for an approved one: fix the export and render again. A project without Playwright: the script says so and exits; ask the user to install it, or export without PNGs and tell the user the golden has no images to compare against.
+An artboard with a script error or a resource that did not load (an asset missing from `assets/`, a font that failed) gets no PNG, and the script names it and exits with an error, because an incomplete golden would pass for an approved one: fix the export and render again. A project without Playwright: the script says so and exits; ask the user to install it. A golden without its PNGs is no golden: the spec stays `Pending` until every ID has one.
 
 ## Comparing the app with the golden
 

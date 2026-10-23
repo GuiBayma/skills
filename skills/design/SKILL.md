@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Design
 
-Turn the UI of one **spec** (the file passed with the invocation, `/design docs/features/<feature-name>/SPEC.md`) into a **golden**: the approved design that the feature's tasks are built and checked against. You research how better apps solved the same screens, build every screen, state and breakpoint as an artboard on a canvas of the Design Artifact type, refine it with the user in comment **rounds**, and export it. Done when the user approved the design, every state the spec names has an artboard, the spec diff was approved and written, and the snapshot is on disk by [SNAPSHOT.md](./SNAPSHOT.md) with one PNG per ID and the motion sheet.
+Turn the UI of one **spec** (the file passed with the invocation, `/design docs/features/<feature-name>/SPEC.md`) into a **golden**: the approved design that the feature's tasks are built and checked against. You research how better apps solved the same screens, build every screen, state and breakpoint as an artboard on a canvas of the Design Artifact type, refine it with the user in comment **rounds**, and export it. Done when the user approved the design, every state the spec names has an artboard, the snapshot is on disk by [SNAPSHOT.md](./SNAPSHOT.md) with one PNG per ID and a motion row per state transition, and only then the spec diff was approved and written.
 
 Standing instructions for the whole session:
 
@@ -25,7 +25,7 @@ Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<brea
 
 1. **Load the spec and the base.** Read the spec in full and its `## Design` section:
    - `Pending`: a new design, the whole process below.
-   - A golden, and the user named IDs with the invocation (`/design <spec> <ID>…`): a **reopening**, usually because `implement` found an artboard it cannot build. Work on the same canvas, only those IDs and the states they drag in, through steps 6 to 9; the export replaces only their files.
+   - A golden, and the user named IDs with the invocation (`/design <spec> <ID>…`): a **reopening**, usually because `implement` found an artboard it cannot build. Work on the same canvas, only those IDs and the states they drag in, through steps 6 to 9; the export replaces only their files, and the spec changes only where those IDs changed it.
    - Anything else (`No UI`, `Waived`, a golden with no IDs named): stop, with the user told what it says.
 
    Read the project pointers above. List the screens the spec touches, and for each one fix its **base**:
@@ -49,7 +49,9 @@ Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<brea
 
 7. **Run the round.** Republish, label the version `Round <N>`, and send the user one message: the link; the **decisions for you** (each variant group and each open question, with your recommendation); what held up. Then wait. The user comments on the canvas and says the round is ready (`rodada pronta`, in whatever words): read every comment (the `ArtifactComments` tool), answer each in its own thread with what changed or the question it raises, apply the changes, and go back to step 6. The loop ends when the user approves (`aprovado`), accepted only when every ID of the matrix has an artboard and no variant group is still open; otherwise answer with what is missing. On approval, each variant group collapses to its winner, retitled with the plain ID.
 
-8. **Update the spec.** Show the user, in the terminal, the diff of the spec: the behaviour changes the rounds produced, and the `## Design` section rewritten as below. Write it only after the user's OK, because the spec feeds `tasks` and an error there spreads to every task.
+8. **Export the snapshot** by [SNAPSHOT.md](./SNAPSHOT.md). Done when every ID of the matrix has its `png/<ID>.png` and every state transition in the matrix has a row in `motion.md`, kept or rejected. The two checks are separate, because a PNG is a state and a motion row is a transition between states, so their counts never need to agree. An export that cannot finish (no Playwright, an artboard that fails to render) stops you here with the spec still `Pending`, because `tasks` cuts any spec that names a golden and every task would then compare against images that do not exist.
+
+9. **Update the spec.** Show the user, in the terminal, the diff of the spec: the behaviour changes the rounds produced, and the `## Design` section rewritten as below. Write it only after the user's OK, because the spec feeds `tasks` and an error there spreads to every task. End the turn with the snapshot path, the number of IDs (each with its PNG) and the number of motion rows.
 
    ```markdown
    ## Design
@@ -60,5 +62,3 @@ Every artboard carries one **ID** as its board `title`: `<screen>--<state>@<brea
    ```
 
    Every ID appears on some line, each line naming the requirement its artboards make visible, because `tasks` gives each task the IDs of the stories it carries.
-
-9. **Export the snapshot** by [SNAPSHOT.md](./SNAPSHOT.md), and end the turn with the snapshot path and the count of IDs, PNGs and motion rows, which must agree.

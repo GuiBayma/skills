@@ -20,8 +20,8 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 5. **Monta o canvas**: uma linha por tela, com a base, os estados e um post-it de referências. Onde a direção está aberta, as variantes ficam lado a lado.
 6. **Autocrítica** antes de cada rodada, feita por um sub-agente que não acompanhou a construção. Ele classifica o que encontra como Broken, Ugly ou Fragile.
 7. **Rodadas.** Você comenta no canvas e diz `rodada pronta`. O agente responde cada thread, aplica as mudanças e republica como `Round N`. O `aprovado` só vale com a matriz completa e as variantes decididas.
-8. **Atualiza a spec** por um diff mostrado no terminal, gravado só depois do seu OK. O diff inclui a seção `## Design`, que liga cada ID a uma user story.
-9. **Exporta o snapshot** (`SNAPSHOT.md`): o canvas com runtime e assets, um PNG por ID e a ficha de movimento.
+8. **Exporta o snapshot** (`SNAPSHOT.md`): o canvas com runtime e assets, um PNG por ID e a ficha de movimento com uma linha por transição de estado. São duas conferências separadas, porque um PNG é um estado e uma linha de movimento é uma transição. Se o export não termina (sem Playwright, artboard que falha), a spec continua `Pending`.
+9. **Atualiza a spec** por um diff mostrado no terminal, gravado só depois do seu OK. O diff inclui a seção `## Design`, que liga cada ID a uma user story. Esse passo vem depois do export, para que a spec nunca aponte um gabarito incompleto.
 
 ## Arquivos
 

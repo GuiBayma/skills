@@ -17,7 +17,7 @@ Os dois diretórios são anotação de trabalho, adicionados ao `.gitignore` qua
 
 ## O que faz
 
-1. **Reunir a fonte** e fixá-la: os dois cortes são feitos da mesma coisa. Uma spec com Design `Pending` para aqui e aponta para `/design`. Com um gabarito, cada ID dele vai para exatamente uma task, na linha **Design**, com um item de verificação por ID.
+1. **Reunir a fonte** e fixá-la: os dois cortes são feitos da mesma coisa. Uma spec com Design `Pending` para aqui e aponta para `/design`. Com um gabarito (e um PNG para cada ID dele; um ID sem PNG também para aqui), cada ID vai para exatamente uma task, na linha **Design**, com um item de verificação por ID.
 2. **Explorar o repositório**, procurando **prefactoring**: mudanças que tornam a implementação fácil, cortadas como tasks próprias que vêm primeiro.
 3. **Fixar o briefing** quando a fonte não é um arquivo: o quê e por quê, nas palavras da própria fonte, sem pista de sequência ou fatiamento.
 4. **Rascunhar seu corte** por `CUTTING.md`.
