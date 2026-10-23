@@ -2,8 +2,11 @@
 // Renderiza cada artboard de um snapshot de design em png/<ID>.png, ou serve o
 // canvas para ver os artboards vivos (animações incluídas).
 //
-//   node render.mjs <design-dir>          gera os PNGs
+//   node render.mjs <design-dir> [ID…]    gera os PNGs de todos os IDs, ou só dos dados
 //   node render.mjs --serve <design-dir>  serve e imprime a URL de cada artboard
+//
+// Um artboard com erro de script ou recurso que não carregou não tem o PNG salvo,
+// e o comando sai com erro, porque um gabarito incompleto passaria por aprovado.
 //
 // O Playwright vem do projeto em que o comando roda, porque a skill não instala
 // dependências.
@@ -14,7 +17,8 @@ import { extname, join, resolve, sep } from 'node:path';
 
 const args = process.argv.slice(2);
 const serveOnly = args[0] === '--serve';
-const designDir = resolve(serveOnly ? args[1] : args[0] ?? '');
+const [designArg, ...onlyIds] = serveOnly ? args.slice(1) : args;
+const designDir = resolve(designArg ?? '');
 const canvasDir = join(designDir, 'canvas');
 const types = {
   '.html': 'text/html',
@@ -59,7 +63,13 @@ await new Promise((done) => server.listen(0, '127.0.0.1', done));
 const origin = `http://127.0.0.1:${server.address().port}`;
 
 const canvas = JSON.parse(await readFile(join(canvasDir, 'canvas.json'), 'utf8'));
-const boards = canvas.order.map((file) => ({ file, ...canvas.boards[file], id: canvas.boards[file].title ?? file.replace(/\.dc\.html$/, '') }));
+const allBoards = canvas.order.map((file) => ({ file, ...canvas.boards[file], id: canvas.boards[file].title ?? file.replace(/\.dc\.html$/, '') }));
+const unknownIds = onlyIds.filter((id) => !allBoards.some((board) => board.id === id));
+if (unknownIds.length > 0) {
+  console.error(`IDs ausentes do canvas: ${unknownIds.join(', ')}`);
+  process.exit(2);
+}
+const boards = onlyIds.length > 0 ? allBoards.filter((board) => onlyIds.includes(board.id)) : allBoards;
 
 if (serveOnly) {
   for (const board of boards) console.log(`${board.id}\t${origin}/${board.file}`);
@@ -85,13 +95,24 @@ if (serveOnly) {
   const failures = [];
   for (const board of boards) {
     const page = await browser.newPage({ viewport: { width: board.w, height: board.h } });
-    page.on('pageerror', (error) => failures.push(`${board.id}: ${error.message}`));
+    const problems = [];
+    page.on('pageerror', (error) => problems.push(error.message));
+    page.on('requestfailed', (request) => problems.push(`${request.url()}: ${request.failure()?.errorText}`));
+    page.on('response', (response) => {
+      if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) {
+        problems.push(`${response.url()}: HTTP ${response.status()}`);
+      }
+    });
     await page.goto(`${origin}/${board.file}`, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(300);
-    const path = join(designDir, 'png', `${board.id}.png`);
-    await page.screenshot({ path, fullPage: board.expand === 'fill' });
-    console.log(path);
+    if (problems.length > 0) {
+      failures.push(...problems.map((problem) => `${board.id}: ${problem}`));
+    } else {
+      const path = join(designDir, 'png', `${board.id}.png`);
+      await page.screenshot({ path, fullPage: board.expand === 'fill' });
+      console.log(path);
+    }
     await page.close();
   }
   await browser.close();

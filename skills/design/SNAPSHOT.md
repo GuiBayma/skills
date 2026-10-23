@@ -20,7 +20,7 @@ The snapshot is valid from approval until the feature's last task merges. After 
 Two changes reach it in between, both decided by the user when `implement` finds an artboard it cannot build as drawn:
 
 - **A small divergence accepted**: `implement` replaces `png/<ID>.png` with the app's screenshot of that ID and records the reason in its PR, so later tasks compare against what was built.
-- **A design divergence**: `/design <spec> <ID>…` reopens those IDs on the canvas and re-exports only their files.
+- **A design divergence**: `/design <spec> <ID>…` reopens those IDs on the canvas and re-exports only their files: their artboards and assets, and their PNGs rendered by ID, so a PNG an earlier divergence replaced stays as it is.
 
 ## Exporting
 
@@ -28,7 +28,7 @@ With the Artifact tool, on the approved canvas:
 
 1. Read `project/canvas.json` and every `project/*.dc.html` it lists (`read` with `paths`), plus `artifact-type/dc-runtime.js`. Save them under `canvas/`, the runtime as `support.js`.
 2. Read each asset the artboards reference (every `/_blob/<id>` in them) one by one (`read` with `path` set to the id: an id in `paths` is refused), into `canvas/assets/`; the tool names each file `<id>.<ext>`, which is what the renderer serves.
-3. Render the PNGs, then check the count: one `png/<ID>.png` per board in `canvas.json`.
+3. Render the PNGs, then check the count: one `png/<ID>.png` per board in `canvas.json`. A reopening renders only its IDs.
 4. Write `motion.md` from the sheet built in the rounds.
 
 ## Rendering and viewing
@@ -37,10 +37,11 @@ With the Artifact tool, on the approved canvas:
 
 ```sh
 node <skill-dir>/render.mjs docs/features/<feature-name>/design          # png/<ID>.png for every board
+node <skill-dir>/render.mjs docs/features/<feature-name>/design <ID>…    # only those IDs; an ID not on the canvas is refused
 node <skill-dir>/render.mjs --serve docs/features/<feature-name>/design  # a URL per ID, to watch motion live
 ```
 
-A project without Playwright: the script says so and exits; ask the user to install it, or export without PNGs and tell the user the golden has no images to compare against.
+An artboard with a script error or a resource that did not load (an asset missing from `assets/`, a font that failed) gets no PNG, and the script names it and exits with an error, because an incomplete golden would pass for an approved one: fix the export and render again. A project without Playwright: the script says so and exits; ask the user to install it, or export without PNGs and tell the user the golden has no images to compare against.
 
 ## Comparing the app with the golden
 
