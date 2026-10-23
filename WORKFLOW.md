@@ -49,7 +49,7 @@ stateDiagram-v2
 
 ## O ciclo de desenvolvimento em detalhe
 
-1. **Implementar.** Em uma sessão nova, `/implement <task>`. O desenvolvedor segue até abrir o PR e fica esperando. Não encerre essa sessão. Se a task tem linha Design e um artboard se mostra inviável, o desenvolvedor para e pergunta: aceitar a divergência, ou reabrir o design em outra sessão com `/design <SPEC> <ID>…` enquanto ele espera.
+1. **Implementar.** Em uma sessão nova, `/implement <task>`. O desenvolvedor segue até abrir o PR e fica esperando. Não encerre essa sessão. Se a linha Design da task nomeia IDs e um artboard se mostra inviável, o desenvolvedor para e pergunta: aceitar a divergência, ou reabrir o design em outra sessão com `/design <SPEC> <ID>…` enquanto ele espera.
 2. **Revisar.** Em outra sessão nova, `/review #<pr>`. Quando a review é publicada, a sessão do revisor pode ser encerrada: cada review é um agente fresco, sem memória da anterior.
 3. **Responder.** De volta ao desenvolvedor: `Eu adicionei uma review, pode avaliar`. Ele corrige, responde no PR e espera. Você pode adicionar os seus próprios pontos antes de avisar.
 4. **Decidir.** Lendo a resposta, uma de duas saídas:

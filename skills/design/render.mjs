@@ -123,6 +123,9 @@ if (mode === '--serve') {
   await mkdir(join(designDir, 'png'), { recursive: true });
   const failures = [];
   for (const board of boards) {
+    // O PNG anterior sai antes de renderizar: só um render completo o recria.
+    const path = join(designDir, 'png', `${board.id}.png`);
+    await rm(path, { force: true });
     const page = await browser.newPage({ viewport: { width: board.w, height: board.h } });
     const problems = [];
     page.on('pageerror', (error) => problems.push(error.message));
@@ -132,17 +135,18 @@ if (mode === '--serve') {
         problems.push(`${response.url()}: HTTP ${response.status()}`);
       }
     });
-    await page.goto(`${origin}/${board.file}`, { waitUntil: 'networkidle' });
-    await page.evaluate(() => document.fonts.ready);
-    await page.waitForTimeout(300);
-    const path = join(designDir, 'png', `${board.id}.png`);
-    if (problems.length > 0) {
-      failures.push(...problems.map((problem) => `${board.id}: ${problem}`));
-      await rm(path, { force: true });
-    } else {
-      await page.screenshot({ path, fullPage: board.expand === 'fill' });
-      console.log(path);
+    try {
+      await page.goto(`${origin}/${board.file}`, { waitUntil: 'networkidle' });
+      await page.evaluate(() => document.fonts.ready);
+      await page.waitForTimeout(300);
+      if (problems.length === 0) {
+        await page.screenshot({ path, fullPage: board.expand === 'fill' });
+        console.log(path);
+      }
+    } catch (error) {
+      problems.push(error.message.split('\n')[0]);
     }
+    failures.push(...problems.map((problem) => `${board.id}: ${problem}`));
     await page.close();
   }
   await browser.close();

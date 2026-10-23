@@ -73,6 +73,19 @@ test('removes the stale PNG of an artboard that fails', async () => {
   await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
 });
 
+test('removes the stale PNG of an artboard that never settles', async () => {
+  const designDir = await snapshot({
+    'a.dc.html': { id: 'tela--a@mobile', head: '<script>setInterval(() => fetch("/canvas.json"), 100)</script>' },
+  });
+  await writeFile(join(designDir, 'png', 'tela--a@mobile.png'), 'gabarito anterior');
+
+  const result = await render(designDir);
+
+  assert.notEqual(result.code, 0);
+  assert.match(result.stderr, /tela--a@mobile/);
+  await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
+});
+
 test('lists the assets still missing, following the ones already exported', async () => {
   const font = 'fedcba9876543210fedcba9876543210';
   const sheet = '0123456789abcdef0123456789abcdef';
