@@ -19,6 +19,7 @@ The body of every PR opened by `implement`. Skip preambles and keep prose brief;
   **After:** <the same test or command green, or the new screenshot>
 - **Refactor:** `<path of each test file covering the affected interface>`: <the test names>, green before and after
 - **Documentation:** before "<the problematic guidance, quoted>"; after "<its replacement, quoted>"; checked: <how links, examples, and consistency with related instructions were checked>
+- **Design:** one line per ID on the task's Design line: `<ID>` (<its scope>): `<test that reaches it>`, golden `png/<ID>.png`, app screenshot `<where it is published>`, <matches, or the accepted divergence and why>; motion: <each row checked, and how>
 
 ## Merge Danger
 
@@ -48,6 +49,7 @@ Fill one slot for every category below that the change falls into, because a mix
 - **Behaviour changes with testable logic:** the **Before** is a test observed red during `tdd`, and the **After** is the same test green. Keep new regression tests in the diff; an existing test that reproduces the problem can be cited by path and name without editing it. Console output or a temporary probe (a CI run made to fail, then reverted) complements that test. Screenshots rank first for visual changes when the environment can take them; they complement tests for any logic changed.
 - **Configuration and CI wiring** (a build script, a workflow step, an ignore list): the **Before** is the command observed failing (a missing target, a red lint, a temporary probe made to fail and then reverted), and the **After** is the same command green.
 - **Documentation changes:** the Documentation slot, one per passage changed.
+- **UI against a golden** (the task's Design line names IDs; `None` is no golden): the Design slot. The golden lives outside version control, so name its PNG by path and publish the app's screenshot where the repo's docs say test screenshots go (a CI artifact); `review` compares the pair and cannot run the tests, so a repo with no such place stops you before the PR, with the user told and a task proposed to publish them.
 - **Behaviour-preserving refactors:** the Refactor slot. A refactor that also fixes or adds behaviour supplies red-to-green evidence for that part.
 
 Keep the red output you saw at the time, because it cannot be reproduced once the code is green.

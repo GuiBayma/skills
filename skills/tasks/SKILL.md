@@ -21,6 +21,8 @@ In both cases, check `.gitignore` and add the directory (`docs/features/` or `do
 
 1. **Gather the source.** Work from the conversation. When the user passes a reference (a spec path, a plan file, an issue URL), read its full body. The source is fixed from here on: both cuts are made from it.
 
+   A spec whose `## Design` section is `Pending` stops you here, with the user pointed at `/design <spec>`, because a screen cut into tasks before its golden exists gets built from guesses. A spec whose section names a golden carries its IDs into the cut by [CUTTING.md](./CUTTING.md), once every ID it lists has its `png/<ID>.png` in the golden's directory; an ID without one stops you here, with the user pointed at `/design <spec> <ID>…` to finish the export, because a task cannot be verified against an image that does not exist.
+
 2. **Explore the repo** until you know the current state of the code the work touches. Write tasks in the project's glossary vocabulary and respect the ADRs in that area; load the `domain-modeling` skill for where they live. Look for **prefactoring**: changes that make the implementation easy, cut as their own tasks that come first ("make the change easy, then make the easy change").
 
 3. **Fix the brief** when the source is not a file. Write a brief carrying the problem, the decisions reached, and the constraints, in the source's own words. A brief states _what_ and _why_; sequence and slicing belong to the cuts, so a brief that already hints at them has leaked yours. When the source is a file, the file is the brief.
