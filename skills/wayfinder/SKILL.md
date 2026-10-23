@@ -96,7 +96,7 @@ When an existing ticket turns out to sit past the destination, close it with a R
 
 ## The roadmap
 
-When no ticket is open and Not yet specified is empty, the way is clear and the next step is the roadmap: `docs/maps/<slug>/ROADMAP.md`, the sequenced list of features that carries the decisions to the destination, drawn in its own session by [ROADMAPPING.md](./ROADMAPPING.md). From there each feature is opened in turn, one in flight at a time, and worked through the `feature`, `tasks` and `implement` skills.
+When no ticket is open and Not yet specified is empty, the way is clear and the next step is the roadmap: `docs/maps/<slug>/ROADMAP.md`, the sequenced list of features that carries the decisions to the destination, drawn in its own session by [ROADMAPPING.md](./ROADMAPPING.md). From there each feature is opened in turn, one in flight at a time, and worked through the `feature`, `design` (when it has UI), `tasks` and `implement` skills.
 
 The roadmap is a living artifact: implementing a feature surfaces new fog, new fog becomes tickets, and every ticket closed after the roadmap was drawn sends the roadmap back under review. The map ends when the last task of the last feature is `done`, never when the roadmap is written.
 

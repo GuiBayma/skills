@@ -4,7 +4,7 @@ Este documento descreve o fluxo de trabalho completo das skills deste repositór
 
 Duas regras valem em todos os estados:
 
-- **Planejar na mesma sessão, executar em sessão nova.** As skills de planejamento (`grilling`, `wayfinder`, `feature` e `tasks` quando a fonte é a conversa) trabalham sobre a conversa em curso e por isso ficam na sessão em que ela aconteceu. As skills de execução (`tasks` a partir de uma SPEC, `implement`, `review`, `retro`, `follow-ups`) rodam cada uma em uma sessão nova, porque a entrada delas está em arquivos ou no PR. A única sessão de execução que vive mais de uma etapa é a do desenvolvedor, que nasce na `implement` e morre no merge.
+- **Planejar na mesma sessão, executar em sessão nova.** As skills de planejamento (`grilling`, `wayfinder`, `feature` e `tasks` quando a fonte é a conversa) trabalham sobre a conversa em curso e por isso ficam na sessão em que ela aconteceu. A `design` é planejamento com você presente, mas sua entrada é a SPEC e o ciclo de rodadas é longo, então ela roda em sessão nova. As skills de execução (`tasks` a partir de uma SPEC, `implement`, `review`, `retro`, `follow-ups`) rodam cada uma em uma sessão nova, porque a entrada delas está em arquivos ou no PR. A única sessão de execução que vive mais de uma etapa é a do desenvolvedor, que nasce na `implement` e morre no merge.
 - **Uma task por vez.** Planejamento (features, mapas, tasks avulsas) pode nascer em paralelo, mas o desenvolvimento é serializado.
 
 ## Visão geral
@@ -16,7 +16,9 @@ stateDiagram-v2
     Conversa --> Tasks: tasks
     Conversa --> Roadmap: wayfinder
     Roadmap --> SPEC: uma feature por vez
-    SPEC --> Tasks: tasks
+    SPEC --> Design: design, se a SPEC tem UI
+    Design --> Tasks: tasks
+    SPEC --> Tasks: tasks, sem UI
     Tasks --> PR: implement
     PR --> Review: review
     Review --> Resposta: desenvolvedor avalia
@@ -35,8 +37,9 @@ stateDiagram-v2
 | Estado | Skill | Sessão | Prompt | Entrada | Saída | Quem decide a transição |
 | --- | --- | --- | --- | --- | --- | --- |
 | Conversa | nenhuma, `grilling` ou `wayfinder` | nova | `Eu quero resolver ...`, `/grilling ...`, `/wayfinder ...` ou `/wayfinder <MAP>` para abrir a próxima feature de um roadmap | um problema, ou um mapa com feature `planned` | entendimento compartilhado, ou um mapa e um `ROADMAP.md`, ou a próxima feature `in-progress` com a conversa pronta para a `feature` | você: invoca `feature` ou `tasks` quando a conversa amadurece |
-| SPEC | `feature` | a mesma da conversa | `/feature` | a conversa | `docs/features/<feature>/SPEC.md` | automática: segue para `tasks` |
-| Tasks | `tasks` | nova (ou a mesma da conversa, se não houve SPEC) | `/tasks docs/features/<feature>/SPEC.md` ou `/tasks` | SPEC ou conversa | `docs/features/<feature>/tasks/*.md` ou `docs/tasks/<task>.md` | você: escolhe a próxima task da fila |
+| SPEC | `feature` | a mesma da conversa | `/feature` | a conversa | `docs/features/<feature>/SPEC.md` | a seção Design da SPEC: `Pending` segue para `design`; senão, para `tasks` |
+| Design | `design` (só no Claude Code) | nova | `/design docs/features/<feature>/SPEC.md`; depois, por rodada, `rodada pronta` e, no fim, `aprovado` | a SPEC | o gabarito em `docs/features/<feature>/design/` e a SPEC atualizada | você: aprova o design e o diff da SPEC; segue para `tasks` |
+| Tasks | `tasks` | nova (ou a mesma da conversa, se não houve SPEC) | `/tasks docs/features/<feature>/SPEC.md` ou `/tasks` | SPEC (com gabarito, se tem UI) ou conversa | `docs/features/<feature>/tasks/*.md` ou `docs/tasks/<task>.md` | você: escolhe a próxima task da fila |
 | PR | `implement` | nova, a do **desenvolvedor** | `/implement docs/features/<feature>/tasks/01-first-task.md` ou `/implement docs/tasks/<task>.md` | um arquivo de task | um PR aberto | automática: todo PR aberto recebe uma review |
 | Review | `review` | nova, a do **revisor**, uma por review | `/review #<pr>` | o PR | um comentário no PR | automática: avisar o desenvolvedor |
 | Resposta | `implement` | a do desenvolvedor | `Eu adicionei uma review, pode avaliar` | o comentário da review | correções e resposta no PR | você: aprova ou pede nova review |
@@ -46,7 +49,7 @@ stateDiagram-v2
 
 ## O ciclo de desenvolvimento em detalhe
 
-1. **Implementar.** Em uma sessão nova, `/implement <task>`. O desenvolvedor segue até abrir o PR e fica esperando. Não encerre essa sessão.
+1. **Implementar.** Em uma sessão nova, `/implement <task>`. O desenvolvedor segue até abrir o PR e fica esperando. Não encerre essa sessão. Se a task tem linha Design e um artboard se mostra inviável, o desenvolvedor para e pergunta: aceitar a divergência, ou reabrir o design em outra sessão com `/design <SPEC> <ID>…` enquanto ele espera.
 2. **Revisar.** Em outra sessão nova, `/review #<pr>`. Quando a review é publicada, a sessão do revisor pode ser encerrada: cada review é um agente fresco, sem memória da anterior.
 3. **Responder.** De volta ao desenvolvedor: `Eu adicionei uma review, pode avaliar`. Ele corrige, responde no PR e espera. Você pode adicionar os seus próprios pontos antes de avisar.
 4. **Decidir.** Lendo a resposta, uma de duas saídas:
@@ -62,6 +65,6 @@ A fila é um conjunto de arquivos de task ainda não mergeados, e a regra de pri
 1. Tasks criadas pela `retro` ou pela `follow-ups` do ciclo que acabou de fechar. Elas corrigem o ambiente ou pagam uma dívida da feature, e passam pelo mesmo ciclo `implement` e `review` antes de qualquer outra coisa.
 2. A próxima task da feature em andamento, na ordem numerada em `tasks/`.
 3. Tasks avulsas em `docs/tasks/`.
-4. A próxima feature `planned` do `ROADMAP.md`, começando pelo estado Conversa: `/wayfinder <MAP>` abre a feature (carrega as decisões dos tickets e a SPEC anterior, marca `in-progress`, faz grilling) e entrega a conversa à `feature`, que escreve a SPEC; só então vem `tasks`.
+4. A próxima feature `planned` do `ROADMAP.md`, começando pelo estado Conversa: `/wayfinder <MAP>` abre a feature (carrega as decisões dos tickets e a SPEC anterior, marca `in-progress`, faz grilling) e entrega a conversa à `feature`, que escreve a SPEC; se a SPEC tem UI, vem `design`; só então vem `tasks`.
 
 Uma task avulsa fecha o ciclo na `retro`. Uma feature fecha quando a `follow-ups` da última task não gera tasks novas, ou quando todas as que gerou foram mergeadas. Um roadmap fecha quando todas as suas features fecharam.

@@ -14,6 +14,7 @@ Standing instructions for the whole session:
 - Load the `codebase-design` skill whenever the shape of an interface or the placement of a seam is in question, so what you build is a deep module at a seam the tests can cross.
 - Work in the project's glossary vocabulary and respect the ADRs in the area; load the `domain-modeling` skill for where they live.
 - The user reviews every PR, so a PR is a **wait point**, never the end: the skill ends after the merge.
+- A task with IDs on its **Design** line is built against the spec's **golden** (`docs/features/<feature-name>/design/`), read by [SNAPSHOT.md](../design/SNAPSHOT.md) and [MOTION.md](../design/MOTION.md) from the `design` skill. Each ID gets a browser test that brings the app to that state at that breakpoint and saves its screenshot, because the way to reach a state then lives in code, rerunnable by `review` and by the next design. Compare each screenshot with `png/<ID>.png` and fix what diverges. An artboard you cannot build as drawn (the real component cannot hold the layout, a breakpoint breaks what the mockup hid) stops you: show the user the pair and the reason, and let the user choose between accepting the divergence (your screenshot replaces `png/<ID>.png` and the PR says why) and reopening the design (`/design <spec> <ID>…` in another session, while you wait), because a divergence is a design decision and it is the user's.
 
 ## Process
 

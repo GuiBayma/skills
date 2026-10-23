@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design"
+  short_description: "Turn a spec's UI into an approved golden design"
+policy:
+  allow_implicit_invocation: false
