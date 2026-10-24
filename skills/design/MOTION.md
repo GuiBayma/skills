@@ -29,10 +29,10 @@ Every state transition in the matrix (loading to loaded, empty to filled, closed
 
 ## Checking the code
 
-For each row of the sheet the task cites:
+For each row of the sheet whose ID is on the task's Design line:
 
 - **Values**: the duration, easing, properties and origin in the code match the row, read from the code and, in the ID's browser test, from the element's running animations (`element.getAnimations()`, `getComputedStyle`).
-- **Reduced motion**: the same test under reduced motion (Playwright's `reducedMotion: 'reduce'`) shows the row's variant.
+- **Reduced motion**: the same test under reduced motion (the browser test's reduced-motion emulation, `reducedMotion: 'reduce'` on Playwright) shows the row's variant.
 - **Rejected rows**: the code adds no motion there.
 - **Accepted divergence**: a row that `divergences.md` lists under `motion:` is checked by its values as rewritten; its feel is reported as accepted, because the canvas artboard still shows the motion as designed.
 - **Feel**: what the values cannot show (a crossfade's smoothness, a spring's settle) is judged by watching the golden's artboard live (the project's live view, [SNAPSHOT.md](./SNAPSHOT.md) under Rendering) beside the app, and reported as checked by eye.

@@ -2,14 +2,14 @@
 
 Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill): o design aprovado contra o qual as tasks da feature são construídas e conferidas. As telas são desenhadas num canvas do tipo Design dos Artifacts do Claude, refinadas com você em rodadas de comentários e exportadas para `docs/features/<feature-name>/design/`.
 
-**Invocação:** manual (`/design docs/features/<feature-name>/SPEC.md`), em uma sessão nova do Claude Code, entre a `feature` e a `tasks`, quando a spec tem UI. Com IDs depois da spec (`/design <spec> <ID>…`), apaga os PNGs desses IDs (que ficam pendentes para `tasks` e `implement`) e reabre só esses artboards, em geral porque a `implement` encontrou um que não dá para construir como foi desenhado. Não roda no Codex, porque depende da ferramenta Artifact. O gabarito exportado, por outro lado, é lido por qualquer agente.
+**Invocação:** manual (`/design docs/features/<feature-name>/SPEC.md`), em uma sessão nova do Claude Code, entre a `feature` e a `tasks`, quando a spec tem UI. Com IDs depois da spec (`/design <spec> <ID>…`), apaga os PNGs desses IDs, suas linhas em `divergences.md` e os PNGs dos parciais que dependem deles (todos ficam pendentes para `tasks` e `implement`) e reabre só esses artboards, em geral porque a `implement` encontrou um que não dá para construir como foi desenhado. Não roda no Codex, porque depende da ferramenta Artifact. O gabarito exportado, por outro lado, é lido por qualquer agente.
 
 ## Princípios
 
 - **O código é a fonte da verdade.** O gabarito é um contrato que vale até o merge da última task da feature. Depois disso, a verdade é o app. Tokens e fontes entram no canvas byte a byte, vindos do projeto.
 - **O design decide a aparência e quais estados a tela mostra; a spec decide o comportamento.** Uma mudança de comportamento que surgir nos comentários volta para a spec na aprovação.
 - **Copiar soluções, não a cara.** Os apps de referência dão o padrão, e a identidade do projeto dá a cara.
-- **A skill é genérica; o projeto especializa.** O `AGENTS.md` do projeto aponta um documento com a identidade visual, os breakpoints, a fonte de referências (no meu caso, o Mobbin), as skills de princípios visuais e de movimento, como subir o app e levá-lo a um estado, e o comando que renderiza o gabarito. O `PROJECT.md` da skill é o modelo desse documento. A skill é só texto: o render é código do projeto, testado com o rigor do projeto, e a skill fixa apenas o contrato dele (`SNAPSHOT.md`).
+- **A skill é genérica; o projeto especializa.** O `AGENTS.md` do projeto aponta um documento com a identidade visual, os breakpoints, a fonte de referências (no meu caso, o Mobbin), as skills de princípios visuais e de movimento, como subir o app e levá-lo a um estado, e o comando que renderiza o gabarito. O `PROJECT.md` da skill é o modelo desse documento. A skill é só texto: o render é código do projeto, testado com o rigor do projeto, e a skill fixa apenas o contrato dele (`SNAPSHOT.md`). Sem o comando de render, a skill para no passo 1.
 
 ## O que faz
 
@@ -21,7 +21,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 6. **Autocrítica** antes de cada rodada, feita por um sub-agente que não acompanhou a construção. Ele classifica o que encontra como Broken, Ugly ou Fragile.
 7. **Rodadas.** Você comenta no canvas e diz `rodada pronta`. O agente responde cada thread, aplica as mudanças e republica como `Round N`. O `aprovado` só vale com a matriz completa e as variantes decididas.
 8. **Aprova o diff da spec**, mostrado no terminal: as mudanças de comportamento que as rodadas produziram e a seção `## Design`, que liga cada ID a uma user story. Nada vai para o disco antes do seu OK, porque numa reabertura os PNGs são o que libera a `implement`, e renderizados antes do OK casariam o design novo com as regras antigas.
-9. **Exporta o snapshot e grava a spec** (`SNAPSHOT.md`): o canvas com runtime e assets, um PNG por ID e a ficha de movimento com uma linha por transição de estado. Durante a implementação, uma divergência aceita numa região vai para `divergences.md`, sem tocar o PNG da tela inteira; uma de movimento reescreve a linha da ficha com o que foi construído e também entra lá. Reabrir uma tela reabre junto os parciais que dependem dela. São duas conferências separadas, porque um PNG é um estado e uma linha de movimento é uma transição. Se o export não termina (asset que não baixa, artboard que falha no render), a spec não é gravada e continua `Pending`. A gravação vem depois do export para que a spec nunca aponte um gabarito incompleto.
+9. **Exporta o snapshot e grava a spec** (`SNAPSHOT.md`): o canvas com runtime e assets, um PNG por ID e a ficha de movimento com uma linha por transição de estado. Durante a implementação, uma divergência aceita numa região vai para `divergences.md`, sem tocar o PNG da tela inteira; uma de movimento reescreve a linha da ficha com o que foi construído e também entra lá. Reabrir uma tela reabre junto os parciais que dependem dela. São duas conferências separadas, porque um PNG é um estado e uma linha de movimento é uma transição. Se o export não termina (asset que não baixa, artboard que falha no render), a spec não é gravada e continua `Pending` (ou, numa reabertura, apontando um gabarito cujos IDs reabertos não têm PNG). A gravação vem depois do export para que a spec nunca aponte um gabarito incompleto.
 
 ## Arquivos
 
@@ -30,6 +30,7 @@ Transforma a UI de uma spec de feature em um **gabarito** (o _golden_ da skill):
 - `STATES.md`: o inventário de valores, o catálogo de estados e os sinais de falha usados na autocrítica.
 - `MOTION.md`: os filtros de animação, o formato da ficha de movimento e como o código é conferido contra ela (lido também por `implement` e `review`).
 - `SNAPSHOT.md`: o formato do gabarito em disco, seu ciclo de vida, o export, o contrato do comando de render que o projeto fornece e a comparação com o app (lido também por `tasks`, `implement` e `review`).
+- `agents/openai.yaml`: os metadados que o Codex lê, presentes para a skill ser sincronizada como as demais; lá ela para na criação do canvas, que precisa da ferramenta Artifact.
 
 ## Créditos
 

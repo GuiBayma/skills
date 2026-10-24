@@ -63,9 +63,9 @@ The testing decisions that were made:
 
 Exactly one of:
 
-- `No UI.`: the feature changes no screen.
-- `Pending.`: the feature adds or changes a screen, or a state of one; the `design` skill replaces this line with the approved golden.
-- `Waived: <reason>.`: it changes a screen too slightly to earn a golden (a label, a colour token), with the reason the user accepted.
+- `No UI`: the feature changes no screen.
+- `Pending`: the feature adds or changes a screen, or a state of one; the `design` skill replaces this line with the approved golden.
+- `Waived: <reason>`: it changes a screen too slightly to earn a golden (a label, a colour token), with the reason the user accepted.
 
 `tasks` refuses a spec still `Pending`, so a screen is never built without its golden.
 

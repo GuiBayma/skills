@@ -1,12 +1,12 @@
 ---
 name: wayfinder
-description: Plan work too big for one session, or whose way to the destination is unclear, as a map of decision tickets at docs/maps/<slug>/ resolved one per session, then a roadmap of features carried through the feature, tasks and implement skills until the destination is reached.
+description: Plan work too big for one session, or whose way to the destination is unclear, as a map of decision tickets at docs/maps/<slug>/ resolved one per session, then a roadmap of features carried through the feature, design (when the spec has UI), tasks and implement skills until the destination is reached.
 disable-model-invocation: true
 ---
 
 # Wayfinder
 
-A loose idea has arrived, too big for one session and wrapped in **fog**: the way from here to the **destination** is not visible yet. Wayfinding finds that way instead of charging at the destination. This skill charts a **map** at `docs/maps/<slug>/MAP.md` with its **decision tickets** under `docs/maps/<slug>/tickets/` (questions whose resolution is a decision, never slices of a build), resolves them one per session until the way is clear, then draws the **roadmap** at `docs/maps/<slug>/ROADMAP.md`: the sequence of features that walks the way, each carried through the `feature`, `tasks` and `implement` skills in turn. Done when the last task of the last feature on the roadmap is `done`.
+A loose idea has arrived, too big for one session and wrapped in **fog**: the way from here to the **destination** is not visible yet. Wayfinding finds that way instead of charging at the destination. This skill charts a **map** at `docs/maps/<slug>/MAP.md` with its **decision tickets** under `docs/maps/<slug>/tickets/` (questions whose resolution is a decision, never slices of a build), resolves them one per session until the way is clear, then draws the **roadmap** at `docs/maps/<slug>/ROADMAP.md`: the sequence of features that walks the way, each carried through the `feature`, `design` (when the spec has UI), `tasks` and `implement` skills in turn. Done when the last task of the last feature on the roadmap is `done`.
 
 Standing instructions for every session on a map:
 
