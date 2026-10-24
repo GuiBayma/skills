@@ -23,27 +23,35 @@ const [designArg, ...onlyIds] = mode === 'render' ? args : args.slice(1);
 const designDir = resolve(designArg ?? '');
 const canvasDir = join(designDir, 'canvas');
 
-// Os assets que os artboards e as folhas de estilo já baixadas referenciam e que
-// ainda faltam em assets/, mais as referências que não são /_blob/<id>, que nem o
-// canvas nem o snapshot conseguem resolver. Rodado até sair vazio, cobre as
-// dependências transitivas (uma folha que aponta uma fonte).
+// Os assets que os artboards, as folhas de estilo e os SVGs já baixados referenciam
+// e que ainda faltam em assets/, mais as referências que nada consegue resolver: nem
+// /_blob/<id>, nem um arquivo de canvas/ (support.js, outro artboard), que só os
+// artboards podem apontar. Rodado até sair vazio, cobre as dependências transitivas
+// (uma folha que aponta uma fonte).
+const blobId = (url) => url.match(/^\/_blob\/([0-9a-f]{32})(?:[?#]|$)/)?.[1];
+const external = /^(data:|https?:|\/\/|#|mailto:|javascript:|blob:|about:)/;
+// url() e @import de CSS; src e href de HTML e SVG.
+const references = (text) =>
+  [...text.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)|@import\s+['"]([^'"]+)['"]|\b(?:src|href)\s*=\s*['"]([^'"]+)['"]/g)]
+    .map((match) => match[1] ?? match[2] ?? match[3])
+    .filter((url) => !external.test(url));
 if (mode === '--missing') {
   const assetsDir = join(canvasDir, 'assets');
   const present = await readdir(assetsDir).catch(() => []);
+  const canvasFiles = await readdir(canvasDir);
   const referenced = new Set();
   const unresolvable = [];
-  for (const file of (await readdir(canvasDir)).filter((name) => name.endsWith('.dc.html'))) {
-    for (const [, id] of (await readFile(join(canvasDir, file), 'utf8')).matchAll(/\/_blob\/([0-9a-f]{32})/g)) referenced.add(id);
-  }
-  for (const file of present.filter((name) => name.endsWith('.css'))) {
-    const sheet = await readFile(join(assetsDir, file), 'utf8');
-    const urls = [...sheet.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)|@import\s+['"]([^'"]+)['"]/g)].map((match) => match[1] ?? match[2]);
-    for (const url of urls) {
-      const blob = url.match(/^\/_blob\/([0-9a-f]{32})$/);
-      if (blob) referenced.add(blob[1]);
-      else if (!/^(data:|https?:|#)/.test(url)) unresolvable.push(`${file}: ${url}`);
+  const scan = async (dir, file, resolvesLocally) => {
+    const text = await readFile(join(dir, file), 'utf8');
+    // Um /_blob/ citado fora de um atributo (um script que o busca) também conta.
+    for (const [, id] of text.matchAll(/\/_blob\/([0-9a-f]{32})/g)) referenced.add(id);
+    for (const url of references(text)) {
+      if (!blobId(url) && !resolvesLocally(url)) unresolvable.push(`${file}: ${url}`);
     }
-  }
+  };
+  const inCanvas = (url) => canvasFiles.includes(url.replace(/^\.?\//, '').split(/[?#]/)[0]);
+  for (const file of canvasFiles.filter((name) => name.endsWith('.dc.html'))) await scan(canvasDir, file, inCanvas);
+  for (const file of present.filter((name) => /\.(css|svg)$/.test(name))) await scan(assetsDir, file, () => false);
   const missing = [...referenced].filter((id) => !present.some((name) => name.startsWith(`${id}.`)));
   const lines = [...missing, ...unresolvable];
   if (lines.length > 0) console.log(lines.join('\n'));
@@ -129,7 +137,12 @@ if (mode === '--serve') {
     const page = await browser.newPage({ viewport: { width: board.w, height: board.h } });
     const problems = [];
     page.on('pageerror', (error) => problems.push(error.message));
-    page.on('requestfailed', (request) => problems.push(`${request.url()}: ${request.failure()?.errorText}`));
+    // Um pedido que a própria página cancelou (uma imagem trocada, um fetch abortado)
+    // também chega aqui, como ERR_ABORTED, e não é um recurso quebrado.
+    page.on('requestfailed', (request) => {
+      const reason = request.failure()?.errorText;
+      if (reason !== 'net::ERR_ABORTED') problems.push(`${request.url()}: ${reason}`);
+    });
     const imageUrls = new Set();
     page.on('response', (response) => {
       if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) {

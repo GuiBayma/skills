@@ -180,3 +180,55 @@ test('fails without saving the PNG when an asset is missing', async () => {
   assert.match(result.stderr, /0123456789abcdef0123456789abcdef/);
   await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
 });
+
+test('saves the PNG when the page cancels a request of its own', async () => {
+  const designDir = await snapshot({
+    'a.dc.html': {
+      id: 'tela--a@mobile',
+      head: '<script>const control = new AbortController(); fetch("/canvas.json", { signal: control.signal }).catch(() => {}); setTimeout(() => control.abort(), 0);</script>',
+    },
+  });
+
+  const result = await render(designDir);
+
+  assert.equal(result.code, 0, result.stderr);
+  assert.notEqual((await readFile(join(designDir, 'png', 'tela--a@mobile.png'))).length, 0);
+});
+
+test('lists the references the artboards and SVG assets make that nothing can resolve', async () => {
+  const icon = 'abcdefabcdefabcdefabcdefabcdefab';
+  const designDir = await snapshot({
+    'a.dc.html': {
+      id: 'tela--a@mobile',
+      head: `<script src="./support.js"></script><img src="img/hero.png" alt=""><style>@font-face { font-family: F; src: url(fonts/x.woff2); }</style><a href="#topo">topo</a>`,
+    },
+  });
+  await writeFile(join(designDir, 'canvas', 'support.js'), '');
+  await writeFile(join(designDir, 'canvas', 'assets', `${icon}.svg`), '<svg xmlns="http://www.w3.org/2000/svg"><image href="icons/x.png"/></svg>');
+
+  const result = await render('--missing', designDir);
+
+  assert.equal(result.code, 1);
+  assert.deepEqual(
+    result.stdout.trim().split('\n').sort(),
+    ['a.dc.html: img/hero.png', 'a.dc.html: fonts/x.woff2', `${icon}.svg: icons/x.png`].sort(),
+  );
+});
+
+test('accepts a /_blob/ reference that carries a query or a fragment', async () => {
+  const font = 'fedcba9876543210fedcba9876543210';
+  const sheet = '0123456789abcdef0123456789abcdef';
+  const designDir = await snapshot({
+    'a.dc.html': { id: 'tela--a@mobile', head: `<link rel="stylesheet" href="/_blob/${sheet}">` },
+  });
+  await writeFile(
+    join(designDir, 'canvas', 'assets', `${sheet}.css`),
+    `@font-face { font-family: F; src: url("/_blob/${font}?#iefix") format("embedded-opentype"), url("/_blob/${font}#svgFont") format("svg"); }`,
+  );
+  await writeFile(join(designDir, 'canvas', 'assets', `${font}.woff2`), '');
+
+  const result = await render('--missing', designDir);
+
+  assert.equal(result.code, 0, result.stdout);
+  assert.equal(result.stdout, '');
+});
