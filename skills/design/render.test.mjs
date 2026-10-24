@@ -121,6 +121,18 @@ for (const [usage, head] of [
   });
 }
 
+test('fails without saving the PNG when an image the server does not know the type of does not decode', async () => {
+  const image = 'abcdefabcdefabcdefabcdefabcdefab';
+  const designDir = await snapshot({ 'a.dc.html': { id: 'tela--a@mobile', head: `<img src="/_blob/${image}" alt="peça">` } });
+  await writeFile(join(designDir, 'canvas', 'assets', `${image}.heic`), 'isto não é uma imagem');
+
+  const result = await render(designDir);
+
+  assert.notEqual(result.code, 0);
+  assert.match(result.stderr, new RegExp(image));
+  await assert.rejects(readFile(join(designDir, 'png', 'tela--a@mobile.png')));
+});
+
 test('saves the PNG when every image decodes', async () => {
   const image = 'abcdefabcdefabcdefabcdefabcdefab';
   const designDir = await snapshot({

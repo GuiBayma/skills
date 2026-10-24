@@ -73,6 +73,7 @@ const types = {
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
   '.gif': 'image/gif',
+  '.avif': 'image/avif',
   '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2',
   '.woff': 'font/woff',
@@ -149,11 +150,14 @@ if (mode === '--serve') {
       const reason = request.failure()?.errorText;
       if (reason !== 'net::ERR_ABORTED') problems.push(`${request.url()}: ${reason}`);
     });
+    // O que a página usou como imagem, de <img> ou de CSS, pelo tipo de recurso que o
+    // navegador pediu, e não pelo content-type servido: um formato fora da tabela do
+    // servidor chega como octet-stream e ainda assim precisa decodificar.
     const imageUrls = new Set();
     page.on('response', (response) => {
       if (response.status() >= 400 && !response.url().endsWith('/favicon.ico')) {
         problems.push(`${response.url()}: HTTP ${response.status()}`);
-      } else if ((response.headers()['content-type'] ?? '').startsWith('image/')) {
+      } else if (response.request().resourceType() === 'image') {
         imageUrls.add(response.url());
       }
     });
