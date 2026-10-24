@@ -30,10 +30,16 @@ const canvasDir = join(designDir, 'canvas');
 // (uma folha que aponta uma fonte).
 const blobId = (url) => url.match(/^\/_blob\/([0-9a-f]{32})(?:[?#]|$)/)?.[1];
 const external = /^(data:|https?:|\/\/|#|mailto:|javascript:|blob:|about:)/;
-// url() e @import de CSS; src e href de HTML e SVG.
+// Só o que o navegador carrega para exibir o artboard: url() e @import de CSS, todo
+// src, e href em <link> (HTML) e em <image> e <use> (SVG). Um href de <a> e um
+// action de <form> são navegação e não bloqueiam a exportação.
 const references = (text) =>
-  [...text.matchAll(/url\(\s*['"]?([^'")]+?)['"]?\s*\)|@import\s+['"]([^'"]+)['"]|\b(?:src|href)\s*=\s*['"]([^'"]+)['"]/g)]
-    .map((match) => match[1] ?? match[2] ?? match[3])
+  [
+    ...text.matchAll(
+      /url\(\s*['"]?([^'")]+?)['"]?\s*\)|@import\s+['"]([^'"]+)['"]|\bsrc\s*=\s*['"]([^'"]+)['"]|<(?:link|image|use)\b[^>]*?\bhref\s*=\s*['"]([^'"]+)['"]/g,
+    ),
+  ]
+    .map((match) => match[1] ?? match[2] ?? match[3] ?? match[4])
     .filter((url) => !external.test(url));
 if (mode === '--missing') {
   const assetsDir = join(canvasDir, 'assets');

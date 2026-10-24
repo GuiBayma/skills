@@ -195,23 +195,26 @@ test('saves the PNG when the page cancels a request of its own', async () => {
   assert.notEqual((await readFile(join(designDir, 'png', 'tela--a@mobile.png'))).length, 0);
 });
 
-test('lists the references the artboards and SVG assets make that nothing can resolve', async () => {
+test('lists the resources the artboards and SVG assets reference that nothing can resolve, not their links', async () => {
   const icon = 'abcdefabcdefabcdefabcdefabcdefab';
   const designDir = await snapshot({
     'a.dc.html': {
       id: 'tela--a@mobile',
-      head: `<script src="./support.js"></script><img src="img/hero.png" alt=""><style>@font-face { font-family: F; src: url(fonts/x.woff2); }</style><a href="#topo">topo</a>`,
+      head: `<script src="./support.js"></script><link rel="stylesheet" href="css/x.css"><img src="img/hero.png" alt=""><style>@font-face { font-family: F; src: url(fonts/x.woff2); }</style><a href="#topo">topo</a><a href="/settings">Configurações</a><form action="/busca"></form>`,
     },
   });
   await writeFile(join(designDir, 'canvas', 'support.js'), '');
-  await writeFile(join(designDir, 'canvas', 'assets', `${icon}.svg`), '<svg xmlns="http://www.w3.org/2000/svg"><image href="icons/x.png"/></svg>');
+  await writeFile(
+    join(designDir, 'canvas', 'assets', `${icon}.svg`),
+    '<svg xmlns="http://www.w3.org/2000/svg"><a href="/settings"><image href="icons/x.png"/></a><use href="#icone"/></svg>',
+  );
 
   const result = await render('--missing', designDir);
 
   assert.equal(result.code, 1);
   assert.deepEqual(
     result.stdout.trim().split('\n').sort(),
-    ['a.dc.html: img/hero.png', 'a.dc.html: fonts/x.woff2', `${icon}.svg: icons/x.png`].sort(),
+    ['a.dc.html: css/x.css', 'a.dc.html: img/hero.png', 'a.dc.html: fonts/x.woff2', `${icon}.svg: icons/x.png`].sort(),
   );
 });
 
