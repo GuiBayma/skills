@@ -1,6 +1,6 @@
 # Project
 
-What a project supplies to this skill, and the one document that holds it. The skill is generic: the process, the IDs, the snapshot and the motion sheet are the same everywhere; the look, the widths, the reference source and the way to reach a state come from the project. Step 1 reads this document before anything else; a missing answer is asked of the user once and written here, because the next run needs it too.
+What a project supplies to this skill, and the one document that holds it. The skill is generic: the process, the IDs, the snapshot and the motion sheet are the same everywhere; the look, the widths, the reference source, the way to reach a state and the command that renders the golden come from the project. Step 1 reads this document before anything else; a missing answer is asked of the user once and written here, because the next run needs it too.
 
 The project keeps the answers in one document, pointed at from its `AGENTS.md` (or `CLAUDE.md`) by one line:
 
@@ -60,4 +60,15 @@ How the agent sees a screen as the app shows it today, and how `implement` later
 
 Browser tests by ID: `e2e/screens/<ID>.spec.ts`, run with `npm run e2e`, screenshots published as the `screens` CI artifact.
 Running the app locally: the "Run locally" section of the root `README.md`.
+```
+
+## Golden render
+
+The command that turns the snapshot's `canvas/` into `png/<ID>.png`, and the way to open an artboard live, both under the contract in [SNAPSHOT.md](./SNAPSHOT.md) (Rendering). It is the project's code, tested like the rest of it, because it drives the project's browser tooling and writes into the project's docs. A project without it says so: `design` then stops before the matrix, because its export cannot finish.
+
+```markdown
+## Golden render
+
+Render: `npm run design:render -- docs/features/<feature>/design [ID…]` (`e2e/design-render.ts`, on the project's Playwright).
+Live: `npm run design:serve -- docs/features/<feature>/design`, one URL per ID.
 ```
