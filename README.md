@@ -37,6 +37,7 @@ flowchart TD
 Como eu faço a maior parte do meu desenvolvimento:
 - Nova sessão com um agente: `/grilling Eu quero resolver/fazer ...`
 - Depois da entrevista, mas ainda na mesma sessão, eu invoco a skill `feature` para consolidar o problema e a solução em um documento de especificação (SPEC.md).
+- Se a feature mexe em tela, em uma nova sessão eu rodo `/design docs/features/<nome-da-feature>/SPEC.md`: o agente desenha cada tela, estado e breakpoint num canvas do Claude Design, eu comento em rodadas até aprovar, e o design aprovado vira o gabarito que as tasks seguem.
 - Em uma nova sessão eu rodo `/tasks docs/features/<nome-da-feature>/SPEC.md`. Isso gera as tarefas dentro do diretório da feature.
 - Para cada tarefa eu faço o ciclo de desenvolvimento abaixo.
 
@@ -76,6 +77,7 @@ Invocadas pelo nome (`/nome`); o agente nunca as dispara sozinho.
 | [wayfinder](skills/wayfinder/README.md) | Planeja trabalho grande demais para uma sessão como um mapa de tickets de decisão, resolvidos um por sessão, e depois um roadmap de features |
 | [improve-codebase-architecture](skills/improve-codebase-architecture/README.md) | Varre a base de código em busca de oportunidades de aprofundamento, apresenta um relatório HTML e faz grilling sobre a escolhida |
 | [feature](skills/feature/README.md) | Consolida a conversa atual em uma spec de feature em `docs/features/<nome>/SPEC.md` |
+| [design](skills/design/README.md) | Desenha a UI de uma spec num canvas do Claude Design, refina em rodadas de comentários e exporta o gabarito que as tasks seguem |
 | [tasks](skills/tasks/README.md) | Quebra uma conversa, plano ou spec em tasks do tamanho de uma sessão, após um corte adversarial feito por um sub-agente |
 | [implement](skills/implement/README.md) | Implementa uma task com testes primeiro, por meio de um PR revisado pelo usuário até o merge |
 | [review](skills/review/README.md) | Revisa um PR em dois eixos, Standards e Spec, e publica um único comentário |

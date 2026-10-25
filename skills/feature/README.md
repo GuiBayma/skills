@@ -10,9 +10,9 @@ Consolida a conversa atual em uma **spec de feature** em `docs/features/<feature
 2. Esboça os **seams** em que a feature será testada, nos termos de `codebase-design`. Seams existentes têm preferência sobre novos, e o seam mais alto disponível é o escolhido, porque todo seam é interface que quem chama e os testes precisam aprender.
 3. Nomeia a feature em kebab-case e escreve a spec a partir do template.
 
-A spec tem forma fixa: Problem Statement, Solution, User Stories (uma lista numerada longa), Implementation Decisions, Testing Decisions, Out of Scope, Further Notes. As decisões nomeiam módulos e interfaces em vez de caminhos de arquivo ou trechos de código, porque esses envelhecem rápido. A única exceção é um trecho vindo de um protótipo que codifica uma decisão com mais precisão do que a prosa (uma máquina de estados, um schema, o formato de um tipo).
+A spec tem forma fixa: Problem Statement, Solution, User Stories (uma lista numerada longa), Implementation Decisions, Testing Decisions, Design, Out of Scope, Further Notes. A seção Design diz se a feature mexe em tela: `No UI`, `Pending` (a `design` ainda vai produzir o gabarito, e a `tasks` recusa a spec até lá) ou `Waived: <motivo>` As decisões nomeiam módulos e interfaces em vez de caminhos de arquivo ou trechos de código, porque esses envelhecem rápido. A única exceção é um trecho vindo de um protótipo que codifica uma decisão com mais precisão do que a prosa (uma máquina de estados, um schema, o formato de um tipo).
 
-Termina quando a spec está em disco, toda decisão alcançada na conversa está nela, e todo seam que ela nomeia foi pesado contra os seams que a base de código já tem.
+Termina quando a spec está em disco, toda decisão alcançada na conversa está nela, e todo seam que ela nomeia foi pesado contra os seams que a base de código já tem. Com a seção Design em `Pending`, termina indicando `/design <spec>` em uma sessão nova, antes da `tasks`.
 
 ## Onde vive
 

@@ -1,6 +1,6 @@
 # wayfinder
 
-Planeja trabalho grande demais para uma sessão, ou cujo caminho até o destino não está claro, como um **mapa** de tickets de decisão resolvidos um por sessão, e depois um **roadmap** de features levadas por `feature`, `tasks` e `implement` até o destino ser alcançado.
+Planeja trabalho grande demais para uma sessão, ou cujo caminho até o destino não está claro, como um **mapa** de tickets de decisão resolvidos um por sessão, e depois um **roadmap** de features levadas por `feature`, `design` (quando a spec tem UI), `tasks` e `implement` até o destino ser alcançado.
 
 **Invocação:** manual. `/wayfinder` com uma ideia solta traça um mapa novo; `/wayfinder docs/maps/<slug>/MAP.md` trabalha um mapa existente, opcionalmente nomeando um ticket ou trazendo uma pergunta que a implementação levantou.
 

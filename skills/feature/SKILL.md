@@ -16,6 +16,8 @@ Consolidate the current conversation and your understanding of the codebase into
 
 3. Name the feature in kebab-case and write the spec to `docs/features/<feature-name>/SPEC.md` using the template below. The directory stays out of version control, so add `docs/features/` to `.gitignore` when it is not there yet.
 
+4. When the spec's Design section is `Pending`, end by telling the user the next step is `/design docs/features/<feature-name>/SPEC.md` in a fresh session, before `tasks`.
+
 ## Spec template
 
 ```markdown
@@ -56,6 +58,16 @@ The testing decisions that were made:
 - What makes a good test here: external behaviour observed through the interface, never implementation details
 - Which modules will be tested
 - Prior art for the tests: similar tests already in the codebase
+
+## Design
+
+Exactly one of:
+
+- `No UI`: the feature changes no screen.
+- `Pending`: the feature adds or changes a screen, or a state of one; the `design` skill replaces this line with the approved golden.
+- `Waived: <reason>`: it changes a screen too slightly to earn a golden (a label, a colour token), with the reason the user accepted.
+
+`tasks` refuses a spec still `Pending`, so a screen is never built without its golden.
 
 ## Out of Scope
 

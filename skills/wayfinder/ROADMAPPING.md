@@ -18,7 +18,7 @@ Open the first feature with status `planned` when the previous one is finished (
 1. **Load the context.** Read the feature's entry, the full Resolution of every ticket it carries, and the spec of the previous feature for the state it left, because the new spec is written against that state.
 2. **Set the entry's status to `in-progress`.**
 3. **Bring the feature into the conversation.** Lay out for the user what the feature delivers and each decision it carries, then load the `grilling` skill and grill what the tickets left for the spec to settle: the detail a decision at map resolution leaves open. Decisions reached here reshape nothing on the map; they belong to the spec.
-4. **Hand off.** Tell the user the conversation is ready for the `feature` skill, which consolidates it into `docs/features/<feature-name>/SPEC.md`; `tasks` and `implement` follow from there. Once the spec is on disk, record its path on the entry's Spec line.
+4. **Hand off.** Tell the user the conversation is ready for the `feature` skill, which consolidates it into `docs/features/<feature-name>/SPEC.md`; `design` (when the spec has UI), `tasks` and `implement` follow from there. Once the spec is on disk, record its path on the entry's Spec line.
 
 ## Revising the roadmap
 

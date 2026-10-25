@@ -1,12 +1,12 @@
 ---
 name: wayfinder
-description: Plan work too big for one session, or whose way to the destination is unclear, as a map of decision tickets at docs/maps/<slug>/ resolved one per session, then a roadmap of features carried through the feature, tasks and implement skills until the destination is reached.
+description: Plan work too big for one session, or whose way to the destination is unclear, as a map of decision tickets at docs/maps/<slug>/ resolved one per session, then a roadmap of features carried through the feature, design (when the spec has UI), tasks and implement skills until the destination is reached.
 disable-model-invocation: true
 ---
 
 # Wayfinder
 
-A loose idea has arrived, too big for one session and wrapped in **fog**: the way from here to the **destination** is not visible yet. Wayfinding finds that way instead of charging at the destination. This skill charts a **map** at `docs/maps/<slug>/MAP.md` with its **decision tickets** under `docs/maps/<slug>/tickets/` (questions whose resolution is a decision, never slices of a build), resolves them one per session until the way is clear, then draws the **roadmap** at `docs/maps/<slug>/ROADMAP.md`: the sequence of features that walks the way, each carried through the `feature`, `tasks` and `implement` skills in turn. Done when the last task of the last feature on the roadmap is `done`.
+A loose idea has arrived, too big for one session and wrapped in **fog**: the way from here to the **destination** is not visible yet. Wayfinding finds that way instead of charging at the destination. This skill charts a **map** at `docs/maps/<slug>/MAP.md` with its **decision tickets** under `docs/maps/<slug>/tickets/` (questions whose resolution is a decision, never slices of a build), resolves them one per session until the way is clear, then draws the **roadmap** at `docs/maps/<slug>/ROADMAP.md`: the sequence of features that walks the way, each carried through the `feature`, `design` (when the spec has UI), `tasks` and `implement` skills in turn. Done when the last task of the last feature on the roadmap is `done`.
 
 Standing instructions for every session on a map:
 
@@ -96,7 +96,7 @@ When an existing ticket turns out to sit past the destination, close it with a R
 
 ## The roadmap
 
-When no ticket is open and Not yet specified is empty, the way is clear and the next step is the roadmap: `docs/maps/<slug>/ROADMAP.md`, the sequenced list of features that carries the decisions to the destination, drawn in its own session by [ROADMAPPING.md](./ROADMAPPING.md). From there each feature is opened in turn, one in flight at a time, and worked through the `feature`, `tasks` and `implement` skills.
+When no ticket is open and Not yet specified is empty, the way is clear and the next step is the roadmap: `docs/maps/<slug>/ROADMAP.md`, the sequenced list of features that carries the decisions to the destination, drawn in its own session by [ROADMAPPING.md](./ROADMAPPING.md). From there each feature is opened in turn, one in flight at a time, and worked through the `feature`, `design` (when it has UI), `tasks` and `implement` skills.
 
 The roadmap is a living artifact: implementing a feature surfaces new fog, new fog becomes tickets, and every ticket closed after the roadmap was drawn sends the roadmap back under review. The map ends when the last task of the last feature is `done`, never when the roadmap is written.
 
