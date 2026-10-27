@@ -10,7 +10,7 @@ Testes verificam comportamento pela interface, nunca detalhes de implementação
 
 ## Seams
 
-Um seam é onde a interface de um módulo vive (o termo de `codebase-design`). Testes vivem só em seams **escolhidos**: antes do primeiro teste, o agente escolhe os seams sob teste, cada um com o que pega e o que deixa passar, para que o esforço caia nos caminhos críticos e na lógica complexa em vez de em todo caso de borda. Seams já registrados nas Testing Decisions de uma spec ou em um arquivo de task vêm primeiro; para o resto, um seam existente tem preferência sobre um novo, e o mais alto em que o comportamento é observável é o escolhido. O agente segue sem perguntar e leva a lista para o relato do trabalho (o corpo do PR, quando `implement` abre um), onde o usuário pesa os seams junto com os testes que os cruzam.
+Um seam é onde a interface de um módulo vive (o termo de `codebase-design`). Testes vivem só em seams **escolhidos**: antes do primeiro teste, o agente escolhe os seams sob teste, cada um com o que pega e o que deixa passar, para que o esforço caia nos caminhos críticos e na lógica complexa em vez de em todo caso de borda. Seams já registrados nas Testing Decisions de uma spec ou em um arquivo de task vêm primeiro, como piso: lógica nova que nenhum deles alcança ganha seam próprio, mesmo quando a fonte manda testar só parte dela; para o resto, um seam existente tem preferência sobre um novo, e o mais alto em que o comportamento é observável é o escolhido. O agente segue sem perguntar e leva a lista para o relato do trabalho (o corpo do PR, quando `implement` abre um), onde o usuário pesa os seams junto com os testes que os cruzam.
 
 ## O ciclo
 
