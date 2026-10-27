@@ -56,7 +56,7 @@ Name modules and interfaces rather than file paths or code snippets, because pat
 The testing decisions that were made:
 
 - What makes a good test here: external behaviour observed through the interface, never implementation details
-- Which modules will be tested
+- Which seams each module is tested at: what to test, never what to leave untested, because `tdd` reads them as a floor and an exclusion here becomes a ceiling the implementation and the review both enforce
 - Prior art for the tests: similar tests already in the codebase
 
 ## Design
